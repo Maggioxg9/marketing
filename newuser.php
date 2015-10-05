@@ -62,6 +62,9 @@
 				$conn = null;
 			}
 		}
+	}else{
+		//captch wrong
+		exit();
 	}
 ?>
 
