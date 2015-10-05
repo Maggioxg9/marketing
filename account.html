@@ -1,0 +1,296 @@
+<?php
+	session_start();
+	if(isset($_SESSION['usr']) && isset($_SESSION['pswd'])){
+		//user logged in proceed
+	}else{
+		//not logged in, redirect to login
+		header("Location: login.html");
+		exit();
+	}
+
+
+	if(isset($_POST['changefieldboolean'])){
+		if($_POST['changefieldboolean']=="no"){
+		
+			//database constants
+			$servername = "localhost";
+			$username = "root";
+			$password = "raspberry";
+			$dbname = "marketing";
+			$uemail=$_POST['email'];
+			$uid=$_SESSION['uid'];
+			$userlevel=$_SESSION['ulevel'];
+			$ufname=$_POST['userfname'];
+			$ulname=$_POST['userlname'];
+			$uphone=$_POST['phone'];
+			$newuser=$_SESSION['usr'];
+
+			try{
+
+				//create a database connection
+				$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+				$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+				//create and execute sql query to update user info
+				$stmt= $conn->prepare("update users set email=:email,firstname=:firstname,lastname=:lastname,phone=:phone where userid=:userid");
+				$stmt->execute(array(':email' => "$uemail", ':firstname' => "$ufname", ':lastname' => "$ulname", ':phone' => "$uphone", ':userid' => "$uid"));
+				
+
+				//create and execute sql query to update userarray if level 1 or 2 account
+				if($userlevel ==1){
+					$getusers = $conn->prepare("select username, email, firstname, lastname, phone from users order by lastname asc");
+					$getusers->execute();
+					$allusers= $getusers->fetchAll(PDO::FETCH_ASSOC);
+					$_SESSION['userarray']=json_encode($allusers);
+				}else if($userlevel ==2){
+					$getusers = $conn->prepare("select username, email, firstname, lastname, phone, rep from users where rep=:rep order by lastname asc");
+					$getusers->execute(array(':rep' => "$newuser"));
+					$allusers= $getusers->fetchAll(PDO::FETCH_ASSOC);
+					$_SESSION['userarray']=json_encode($allusers);
+				}
+
+
+				//user info now updated, update session variables
+				$_SESSION['ufname']=$ufname;
+				$_SESSION['ulname']=$ulname;
+				$_SESSION['uphone']=$uphone;
+				$_SESSION['uemail']=$uemail;
+			
+				//close database connection
+				$conn = null;
+			}catch(PDOException $e){
+		
+				//print error details to screen
+				echo $result . "<br>" . $e->getMessage();
+
+				//close database connection
+				$conn = null;
+			}
+		unset($_POST['changefieldboolean']);
+		}
+	}
+
+?>
+
+<!DOCTYPE html>
+<html>
+	<head>
+	<link rel="stylesheet" type="text/css" href="style.css">
+
+	<script>
+		function editAccountInfo(){
+			var change= document.getElementById("changefieldboolean");
+			if(change.value=="no"){
+				change.value="yes";
+			}else{
+				change.value="no";
+			}
+		}
+	</script>
+	<script>
+		function initializeAccountDetails(){
+			var check = "<?php
+						$var="";
+						if(isset($_POST['changefieldboolean'])){
+							$var=$_POST['changefieldboolean'];
+						}
+						echo $var; ?>"; 
+			var change= document.getElementById("changefieldboolean");
+			var ufname = document.getElementById("userfirstname");
+			var ulname = document.getElementById("userlastname");
+			var uemail = document.getElementById("useremail");
+			var uphone = document.getElementById("userphone");
+			var ebutton= document.getElementById("editbutton");
+			if(<?php if(isset($_POST['changefieldboolean'])){
+						echo "true";
+						}else{
+						echo "false";
+						}; ?>){
+				if(check=="yes"){
+					ebutton.value="Save";
+					ufname.disabled=false;
+					ufname.readOnly=false;
+					ulname.disabled=false;
+					ulname.readOnly=false;
+					uemail.disabled=false;
+					uemail.readOnly=false;
+					uphone.disabled=false;
+					uphone.readOnly=false;
+				}
+			}else{
+				// boolean is not set, either on initial page load or because the save operation is over 
+				// either way fields need to be locked again and the boolean reset to no 
+				change.value="no";
+				ebutton.value="Edit Details";
+				ufname.disabled=true;
+				ufname.readOnly=true;
+				ulname.disabled=true;
+				ulname.readOnly=true;
+				uemail.disabled=true;
+				uemail.readOnly=true;
+				uphone.disabled=true;
+				uphone.readOnly=true;
+			}
+		}
+		</script>
+		<script>
+			function removeUserTable(){
+				var userlevel=<?php echo $_SESSION['ulevel'];?>;
+				if(userlevel==3){
+					var utable=document.getElementById("usersummary");
+					while(utable.hasChildNodes()){
+						utable.removeChild(utable.firstChild);
+					}
+					utable.parentNode.removeChild(utable);
+				}
+			}
+		</script>
+		<script>
+		function populateUsers(){
+			var userlevel=<?php echo $_SESSION['ulevel'];?>;
+			if(userlevel!=3){
+				var windowtext= document.getElementById("userwindowtext");
+				var utable=document.getElementById("userstable");
+				var tabledata=<?php echo $_SESSION['userarray'];?>;
+				if(userlevel==1){
+					windowtext.textContent="All Users Summary";
+				}else if(userlevel==2){
+					windowtext.textContent="Assigned Users";
+				}else{}
+				if(tabledata){
+					for(var i=0; i<tabledata.length; i++){
+						var row=utable.insertRow(i);
+						var cell=row.insertCell(0);
+						var celldiv=document.createElement("div");
+						celldiv.setAttribute('class', "celldiv");
+				
+						var lastnamecell=document.createElement("div");
+						lastnamecell.setAttribute('class', "usercell");
+						lastnamecell.textContent=tabledata[i].lastname;
+						celldiv.appendChild(lastnamecell);
+						
+						var firstnamecell=document.createElement("div");
+						firstnamecell.setAttribute('class', "usercell");
+						firstnamecell.textContent=tabledata[i].firstname;
+						celldiv.appendChild(firstnamecell);
+	
+						var usercell=document.createElement("div");
+						usercell.setAttribute('class', "divusername");
+						usercell.textContent=tabledata[i].username
+						celldiv.appendChild(usercell);
+					
+						var email=document.createElement("div");
+						email.setAttribute('class', "divemail");
+						email.textContent=tabledata[i].email;
+						celldiv.appendChild(email);
+				
+						var phone=document.createElement("div");
+						phone.setAttribute('class', "divphone");
+						phone.textContent=tabledata[i].phone;
+						celldiv.appendChild(phone);
+	
+						var rep=document.createElement("div");
+						rep.setAttribute('class', "divusername");
+						rep.textContent=tabledata[i].rep;
+						celldiv.appendChild(rep);
+	
+						var clear=document.createElement("div");
+						clear.setAttribute('class', "clear");
+						celldiv.appendChild(clear);
+
+					
+
+						cell.appendChild(celldiv);
+					}
+				}
+			}
+		}			
+			
+	</script>
+	</head>
+	
+<body>
+	<div id="container">
+		<div id="header">
+			<center><img src="back1.png"></center>
+		</div>
+		<div id="nav">
+		
+		<ul>
+			<li><a href="index.html">Home</a></li>
+			<li><a href="neons.html">Neons</a></li>
+			<li><a href="coasters.html">Coasters</a></li>
+			<li><a href="seat_cards.html">Seat Cards</a></li>
+			<li><a href="koozies.html">Koozies</a></li>
+			<li><a href="flags.html">Flags</a></li>
+			<li><a href="t-shirts.html">T-Shirts</a></li>
+			<li><a href="banners.html">Banners</a></li>
+			<li><a href="misc.html">Misc.</a></li>
+			<li><a href="account.html">Account</a></li>
+			<li><a href="logoff.php">Sign Out</a></li>
+		</ul>
+	
+		</div>
+		<div id="accountsummary">
+			<center>Account Details</center>
+			<form action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> method="post" onsubmit="editAccountInfo()">
+				<input id="changefieldboolean" type="hidden" name="changefieldboolean">
+				<div id="uname" class="accountfield">
+					Username: <input id="username" class="userfield" type="text" name="username" value="<?php echo $_SESSION['usr']; ?>" readonly="readonly" disabled="disabled">
+				</div>
+				<div id="ufname" class="accountfield">
+					First Name: <input id="userfirstname" class="userfield" type="text" name="userfname" value="<?php echo $_SESSION['ufname']; ?>">
+				</div>
+				<div id="ulname" class="accountfield">
+					Last Name: <input id="userlastname" class="userfield" type="text" name="userlname" value="<?php echo $_SESSION['ulname']; ?>">
+				</div>
+				<div id="uemail" class="accountfield">
+					E-Mail: <input id="useremail" class="userfield" type="text" name="email" value="<?php echo $_SESSION['uemail']; ?>">
+				</div>
+				<div id="uphone" class="accountfield">
+					Phone: <input id="userphone" class="userfield" type="text" name="phone" value="<?php echo $_SESSION['uphone']; ?>">
+				</div>
+				<div id="editaccount">
+				<center><input id="editbutton" type="submit" name="editbutton" value="Edit Details"></center>
+				</div>
+			</form>
+			<script>
+				initializeAccountDetails();
+			</script>
+							
+
+		</div>
+		<div id="usersummary">
+			<center><div id="userwindowtext"></div></center>
+			<div id="usersbox">
+				<div style="margin-top: 1em;"></div>
+				<div class="usercell">Last Name</div>
+				<div class="usercell">First Name</div>
+				<div class="divusername">Username</div>
+				<div class="divemail">E-Mail</div>
+				<div class="divphone">Phone</div>
+				<div class="divusername">Assigned Rep.</div>
+				<div class="clear"></div>
+				<table id="userstable">
+				</table>
+				<script>
+					populateUsers();
+				</script>
+			</div>
+		
+		</div>
+		<script>
+			removeUserTable();
+		</script>
+		<div id="itemsummary">
+			<center>Item Summary</center>
+		</div>
+		<div id="ordersummary">
+			<center>Order Summary</center>
+		</div>
+		<div class="clear">
+		</div>
+		
+    </div>
+</body>
+</html>
