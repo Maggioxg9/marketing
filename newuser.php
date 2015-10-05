@@ -18,6 +18,9 @@
 		</div>
 		<center><div class="createusersbox">
 				<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> method="post">
+					<div style="margin-top: 8%;">
+						<br>
+					</div>
 					<div class="createdetails">
 						<span class="formfont">Desired Username:</span>
 							<input class="textbox" type="text" name="username" size="30" maxlength="20">

@@ -28,7 +28,7 @@ position:relative;
 }
 div.loginbox{
 background: white;
-height:600px;
+height:420px;
 width:400px;
 display:inline-block;
 margin: 1em 2em 1em 2em;
@@ -244,15 +244,15 @@ input#editbutton{
 }
 .createusersbox{
 	background: white;
-	height:800px;
-	width:800px;
+	height:500px;
+	width:550px;
 	display:inline-block;
-	margin:0;
+	margin-top 5%;
 	position:relative;
 }
 div.createdetails{
 	text-align: right;
-	padding-right: 25%;
+	padding-right: 5%;
 }
 div#createbtn{
 	
