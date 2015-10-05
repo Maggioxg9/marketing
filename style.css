@@ -247,7 +247,7 @@ input#editbutton{
 	height:500px;
 	width:550px;
 	display:inline-block;
-	margin-top: 5%;
+	margin-top: 1em;
 	position:relative;
 }
 div.createdetails{
