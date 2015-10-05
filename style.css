@@ -254,6 +254,11 @@ div.createdetails{
 	text-align: right;
 	padding-right: 5%;
 }
+div.createdetails#referralfield{
+	text-align: right;
+	padding-right: 5%;
+	display:block;
+}
 div#createbtn{
 	
 }
