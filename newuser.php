@@ -152,7 +152,7 @@
 					</div>
 				</form>
 				<script src='https://www.google.com/recaptcha/api.js'></script>
-				<script changeReferral(); </script>
+				<script> changeReferral(); </script>
 		</div></center>
     </div>
 </body>
