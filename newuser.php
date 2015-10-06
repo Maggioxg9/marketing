@@ -49,6 +49,8 @@
 						//username is free, setup new user
 					}
 					$conn=null;
+					header("Location: newuser.php");
+					
 				}catch(PDOException $e){
 			
 					//print error details to screen
