@@ -11,11 +11,9 @@
 		$response= $recaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
 		if($response !=null && $response->success){
 			if(empty($_POST["username"])||empty($_POST["password"])||empty($_POST["repassword"])||empty($_POST["firstname"])||empty($_POST["lastname"])||empty($_POST["email"])){
-				echo "Please fill out all required fields";
-				exit();
+				$_SESSION['badcreate']="Please fill out all fields.";
 			}else if($_POST["password"]!=$_POST["repassword"]){
-				echo "passwords dont match";
-				exit();
+				$_SESSION['badcreate']="Passwords must match.";
 			}else{
 				//everything is valid, assign variables
 
@@ -45,9 +43,8 @@
 					//check to see if user record was found
 					if($stmt->rowcount() > 0){
 						//user already exists
-						echo "user already exists";
+						$_SESSION['badcreate']="Username already exists, please choose a different username.";
 						$conn=null;
-						exit();
 					}else{
 						//username is free, setup new user
 					}
@@ -64,8 +61,7 @@
 		
 		}else{
 			//recaptcha wasnt valid
-			echo "Bad Captcha";
-			exit();
+			$_SESSION['badcreate']="Click the reCaptcha box before submitting.";
 		}
 	}
 ?>
@@ -87,6 +83,19 @@
 		}
 
 	</script>
+	<script>
+		function initializeForm(){
+			var errorspan=document.getElementById("message");
+			var errorstring="<?php if(isset($_SESSION['badcreate'])){
+							echo $_SESSION['badcreate'];
+							unset($_SESSION['badcreate']);
+						}else{
+							echo "";
+						}
+					?>";
+			errorspan.textContent=errorstring;
+		}
+	</script>
 	</head>
 	
 <body>
@@ -99,7 +108,7 @@
 		<center><div class="createusersbox">
 				<form action="newuser.php" method="post">
 					<div style="margin: 4%;">
-						<span id="message">Please try again.</span>
+						<span id="message"></span>
 					</div>
 					<div class="createdetails">
 						<span class="formfont">Desired Username:</span>
@@ -149,6 +158,7 @@
 					</div>
 				</form>
 				<script src='https://www.google.com/recaptcha/api.js'></script>
+				<script> initializeForm(); </script>
 		</div></center>
     </div>
 </body>
