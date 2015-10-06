@@ -7,60 +7,65 @@
 
 	$recaptcha = new ReCaptcha($secret);
 
-	if($_POST["g-recaptcha-response"]){
+	if(isset($_POST["g-recaptcha-response"])){
 		$response= $recaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
-	}
-	if($response !=null && $response->success){
-		if(empty($_POST["username"])||empty($_POST["password"])||empty($_POST["repassword"])||empty($_POST["firstname"])||empty($_POST["lastname"])||empty($_POST["email"])){
-			echo "Please fill out all required fields";
-			exit();
-		}else if($_POST["password"]!=$_POST["repassword"]){
-			echo "passwords dont match";
-			exit();
-		}else{
-			//everything is valid, assign variables
+		if($response !=null && $response->success){
+			if(empty($_POST["username"])||empty($_POST["password"])||empty($_POST["repassword"])||empty($_POST["firstname"])||empty($_POST["lastname"])||empty($_POST["email"])){
+				echo "Please fill out all required fields";
+				exit();
+			}else if($_POST["password"]!=$_POST["repassword"]){
+				echo "passwords dont match";
+				exit();
+			}else{
+				//everything is valid, assign variables
 
-			//database constants
-			$servername = "localhost";
-			$username = "root";
-			$password = "raspberry";
-			$dbname = "marketing";
-			$newuser= htmlspecialchars($_POST["username"]);
-			$newpass= htmlspecialchars($_POST["password"]);
-			$repass= htmlspecialchars($_POST["repassword"]);
-			$firstname= htmlspecialchars($_POST["firstname"]);
-			$lastname= htmlspecialchars($_POST["lastname"]);
-			$email= htmlspecialchars($_POST["email"]);
-			$phone= htmlspecialchars($_POST["phone"]);
-		
-			try{
-
-				//create a database connection
-				$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-				$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				//database constants
+				$servername = "localhost";
+				$username = "root";
+				$password = "raspberry";
+				$dbname = "marketing";
+				$newuser= htmlspecialchars($_POST["username"]);
+				$newpass= htmlspecialchars($_POST["password"]);
+				$repass= htmlspecialchars($_POST["repassword"]);
+				$firstname= htmlspecialchars($_POST["firstname"]);
+				$lastname= htmlspecialchars($_POST["lastname"]);
+				$email= htmlspecialchars($_POST["email"]);
+				$phone= htmlspecialchars($_POST["phone"]);
+			
+				try{
+	
+					//create a database connection
+					$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+					$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				
-				//create and execute sql query to check if username exists
-				$stmt= $conn->prepare("select userid from users where username= :name");
-				$stmt->execute(array(':name' => "$newuser"));
-
-				//check to see if user record was found
-				if($stmt->rowcount() > 0){
-					//user already exists
-					echo "user already exists";
+					//create and execute sql query to check if username exists
+					$stmt= $conn->prepare("select userid from users where username= :name");
+					$stmt->execute(array(':name' => "$newuser"));
+	
+					//check to see if user record was found
+					if($stmt->rowcount() > 0){
+						//user already exists
+						echo "user already exists";
+						$conn=null;
+						exit();
+					}else{
+						//username is free, setup new user
+					}
 					$conn=null;
-					exit();
-				}else{
-					//username is free, setup new user
+				}catch(PDOException $e){
+			
+					//print error details to screen
+					echo $result . "<br>" . $e->getMessage();
+	
+					//close database connection
+					$conn = null;
 				}
-				$conn=null;
-			}catch(PDOException $e){
-		
-				//print error details to screen
-				echo $result . "<br>" . $e->getMessage();
-
-				//close database connection
-				$conn = null;
 			}
+		
+		}else{
+			//recaptcha wasnt valid
+			echo "Bad Captcha";
+			exit();
 		}
 	}
 ?>
@@ -72,12 +77,12 @@
 
 	<script>
 		function changeReferral(){
-			console.log("here");
 			var field=document.getElementById("referralfield");
-			if(field.style.display=='block'){
-				field.style.display= 'none';
+			var cbtn = document.getElementById("clientbtn");
+			if(cbtn.checked){
+				field.style.display="block";
 			}else{
-				field.style.display= 'block';
+				field.style.display="none";
 			}
 		}
 
@@ -92,9 +97,9 @@
 		<div id="nav">
 		</div>
 		<center><div class="createusersbox">
-				<form action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> method="post">
-					<div style="margin-top: 8%;">
-						<br>
+				<form action="newuser.php" method="post">
+					<div style="margin: 4%;">
+						<span id="message">Please try again.</span>
 					</div>
 					<div class="createdetails">
 						<span class="formfont">Desired Username:</span>
@@ -124,15 +129,10 @@
 						<span class="formfont">Phone:</span>
 							<input class="textbox" type="text" name="phone" size="30" maxlength="20">
 					</div>
-					<div> 
-						<br>
-					</div>
+	
 					<div class="createdetails">
 							<input id="clientbtn" type="radio" name="accounttype" value="client" checked="checked" onclick="changeReferral()">Client Account
 							<input id="employeebtn" type="radio" name="accounttype" value="accelemployee" onclick="changeReferral()">Accel Entertainment Employee
-					</div>
-					<div> 
-						<br>
 					</div>
 					<div class="createdetails" id="referralfield">
 						<span class="formfont">Referral Code:</span>
