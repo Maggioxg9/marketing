@@ -6,7 +6,7 @@
 	$response = null;
 
 	$recaptcha = new ReCaptcha($secret);
-
+	echo print_r($_POST);
 	if(isset($_POST["g-recaptcha-response"])){
 		$response= $recaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
 		if($response !=null && $response->success){
