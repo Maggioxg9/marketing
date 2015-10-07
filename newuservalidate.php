@@ -7,6 +7,15 @@
 
 	$recaptcha = new ReCaptcha($secret);
 
+	$_SESSION['tmpuser']=$_POST['username'];
+	$_SESSION['tmppass']=$_POST['password'];
+	$_SESSION['tmprepass']=$_POST['repassword'];
+	$_SESSION['tmpfname']=$_POST['firstname'];
+	$_SESSION['tmplname']=$_POST['lastname'];
+	$_SESSION['tmpemail']=$_POST['email'];
+	$_SESSION['tmpphone']=$_POST['username'];
+	$_SESSION['tmpref']=$_POST['refcode'];
+	
 	if(isset($_POST["g-recaptcha-response"])){
 		$response= $recaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
 		if($response !=null && $response->success){
@@ -52,6 +61,17 @@
 						header("Location:newuser.html");
 					}else{
 						//username is free, setup new user
+
+
+						//clear saved variables
+						unset($_SESSION['tmpuser']);
+						unset($_SESSION['tmppass']);
+						unset($_SESSION['tmprepass']);
+						unset($_SESSION['tmpfname']);
+						unset($_SESSION['tmplname']);
+						unset($_SESSION['tmpemail']);
+						unset($_SESSION['tmpphone']);
+						unset($_SESSION['tmpref']);
 						$conn=null;
 						header("Location:usercreated.html");
 						exit();
