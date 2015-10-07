@@ -9,20 +9,20 @@
 	}
 
 
-	if(isset($_POST['changefieldboolean'])){
-		if($_POST['changefieldboolean']=="no"){
+	if(isset( htmlspecialchars($_POST['changefieldboolean']))){
+		if( htmlspecialchars($_POST['changefieldboolean'])=="no"){
 		
 			//database constants
 			$servername = "localhost";
 			$username = "root";
 			$password = "raspberry";
 			$dbname = "marketing";
-			$uemail=$_POST['email'];
+			$uemail= htmlspecialchars($_POST['email']);
 			$uid=$_SESSION['uid'];
 			$userlevel=$_SESSION['ulevel'];
-			$ufname=$_POST['userfname'];
-			$ulname=$_POST['userlname'];
-			$uphone=$_POST['phone'];
+			$ufname= htmlspecialchars($_POST['userfname']);
+			$ulname= htmlspecialchars($_POST['userlname']);
+			$uphone= htmlspecialchars($_POST['phone']);
 			$newuser=$_SESSION['usr'];
 
 			try{
@@ -91,8 +91,8 @@
 		function initializeAccountDetails(){
 			var check = "<?php
 						$var="";
-						if(isset($_POST['changefieldboolean'])){
-							$var=$_POST['changefieldboolean'];
+						if(isset( htmlspecialchars($_POST['changefieldboolean']))){
+							$var= htmlspecialchars($_POST['changefieldboolean']);
 						}
 						echo $var; ?>"; 
 			var change= document.getElementById("changefieldboolean");
@@ -101,7 +101,7 @@
 			var uemail = document.getElementById("useremail");
 			var uphone = document.getElementById("userphone");
 			var ebutton= document.getElementById("editbutton");
-			if(<?php if(isset($_POST['changefieldboolean'])){
+			if(<?php if(isset( htmlspecialchars($_POST['changefieldboolean']))){
 						echo "true";
 						}else{
 						echo "false";

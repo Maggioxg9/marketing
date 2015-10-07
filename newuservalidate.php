@@ -7,24 +7,24 @@
 
 	$recaptcha = new ReCaptcha($secret);
 
-	$_SESSION['tmpuser']=$_POST['username'];
-	$_SESSION['tmppass']=$_POST['password'];
-	$_SESSION['tmprepass']=$_POST['repassword'];
-	$_SESSION['tmpfname']=$_POST['firstname'];
-	$_SESSION['tmplname']=$_POST['lastname'];
-	$_SESSION['tmpemail']=$_POST['email'];
-	$_SESSION['tmpphone']=$_POST['username'];
-	$_SESSION['tmpref']=$_POST['refcode'];
-	$_SESSION['tmpbtn']=$_POST['accounttype'];
+	$_SESSION['tmpuser']= htmlspecialchars($_POST['username']);
+	$_SESSION['tmppass']= htmlspecialchars($_POST['password']);
+	$_SESSION['tmprepass']= htmlspecialchars($_POST['repassword']);
+	$_SESSION['tmpfname']= htmlspecialchars($_POST['firstname']);
+	$_SESSION['tmplname']= htmlspecialchars($_POST['lastname']);
+	$_SESSION['tmpemail']= htmlspecialchars($_POST['email']);
+	$_SESSION['tmpphone']= htmlspecialchars($_POST['username']);
+	$_SESSION['tmpref']= htmlspecialchars($_POST['refcode']);
+	$_SESSION['tmpbtn']= htmlspecialchars($_POST['accounttype']);
 	
 	if(isset($_POST["g-recaptcha-response"])){
 		$response= $recaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
 		if($response !=null && $response->success){
-			if(empty($_POST["username"])||empty($_POST["password"])||empty($_POST["repassword"])||empty($_POST["firstname"])||empty($_POST["lastname"])||empty($_POST["email"])){
+			if(empty( htmlspecialchars($_POST["username"]))||empty( htmlspecialchars($_POST["password"]))||empty( htmlspecialchars($_POST["repassword"]))||empty( htmlspecialchars($_POST["firstname"]))||empty( htmlspecialchars($_POST["lastname"]))||empty( htmlspecialchars($_POST["email"]))){
 				$_SESSION['badcreate']="Please fill out all fields.";
 				header("Location:newuser.html");
 				exit();
-			}else if($_POST["password"]!=$_POST["repassword"]){
+			}else if( htmlspecialchars($_POST["password"])!= htmlspecialchars($_POST["repassword"])){
 				$_SESSION['badcreate']="Passwords must match.";
 				header("Location:newuser.html");
 				exit();
