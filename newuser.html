@@ -29,6 +29,8 @@
 			var tmplname = document.getElementById("lastnametext");
 			var tmpemail = document.getElementById("emailtext");
 			var tmpphone = document.getElementById("phonetext");
+			var clientbtn = document.getElementById("clientbtn");
+			var employeebtn = document.getElementById("employeebtn");
 			var tmpref = document.getElementById("referraltext");
 			
 			errorspan.textContent="<?php if(isset($_SESSION['badcreate'])){
@@ -94,6 +96,20 @@
 							echo "";
 						}
 					?>";
+			var tmpbtn="<?php if(isset($_SESSION['tmpbtn'])){
+							echo $_SESSION['tmpbtn'];
+							unset($_SESSION['tmpbtn']);
+						}else{
+							echo "";
+						}
+					?>";
+			if(tmpbtn=="accelemployee"){
+				employeebtn.checked=true;
+			}else{
+				clientbtn.checked=true;
+			}
+			changeReferral();
+			
 		}
 	</script>
 	</head>
@@ -140,7 +156,7 @@
 					</div>
 	
 					<div class="createdetails">
-							<input id="clientbtn"  type="radio" name="accounttype" value="client" checked="checked" onclick="changeReferral()">Client Account
+							<input id="clientbtn"  type="radio" name="accounttype" value="client" onclick="changeReferral()">Client Account
 							<input id="employeebtn" type="radio" name="accounttype" value="accelemployee" onclick="changeReferral()">Accel Entertainment Employee
 					</div>
 					<div class="createdetails" id="referralfield">

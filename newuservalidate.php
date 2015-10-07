@@ -15,6 +15,7 @@
 	$_SESSION['tmpemail']=$_POST['email'];
 	$_SESSION['tmpphone']=$_POST['username'];
 	$_SESSION['tmpref']=$_POST['refcode'];
+	$_SESSION['tmpbtn']=$_POST['accounttype'];
 	
 	if(isset($_POST["g-recaptcha-response"])){
 		$response= $recaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
