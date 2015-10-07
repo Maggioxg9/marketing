@@ -20,11 +20,11 @@
 	if(isset($_POST["g-recaptcha-response"])){
 		$response= $recaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
 		if($response !=null && $response->success){
-			if(empty( htmlspecialchars($_POST["username"]))||empty( htmlspecialchars($_POST["password"]))||empty( htmlspecialchars($_POST["repassword"]))||empty( htmlspecialchars($_POST["firstname"]))||empty( htmlspecialchars($_POST["lastname"]))||empty( htmlspecialchars($_POST["email"]))){
+			if(empty( $_POST["username"])||empty( $_POST["password"])||empty( $_POST["repassword"])||empty( $_POST["firstname"])||empty( $_POST["lastname"])||empty( $_POST["email"])){
 				$_SESSION['badcreate']="Please fill out all fields.";
 				header("Location:newuser.html");
 				exit();
-			}else if( htmlspecialchars($_POST["password"])!= htmlspecialchars($_POST["repassword"])){
+			}else if( $_POST["password"]!= $_POST["repassword"]){
 				$_SESSION['badcreate']="Passwords must match.";
 				header("Location:newuser.html");
 				exit();

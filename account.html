@@ -9,8 +9,8 @@
 	}
 
 
-	if(isset( htmlspecialchars($_POST['changefieldboolean']))){
-		if( htmlspecialchars($_POST['changefieldboolean'])=="no"){
+	if(isset($_POST['changefieldboolean'])){
+		if($_POST['changefieldboolean']=="no"){
 		
 			//database constants
 			$servername = "localhost";
@@ -91,7 +91,7 @@
 		function initializeAccountDetails(){
 			var check = "<?php
 						$var="";
-						if(isset( htmlspecialchars($_POST['changefieldboolean']))){
+						if(isset($_POST['changefieldboolean'])){
 							$var= htmlspecialchars($_POST['changefieldboolean']);
 						}
 						echo $var; ?>"; 
@@ -101,7 +101,7 @@
 			var uemail = document.getElementById("useremail");
 			var uphone = document.getElementById("userphone");
 			var ebutton= document.getElementById("editbutton");
-			if(<?php if(isset( htmlspecialchars($_POST['changefieldboolean']))){
+			if(<?php if(isset($_POST['changefieldboolean'])){
 						echo "true";
 						}else{
 						echo "false";
