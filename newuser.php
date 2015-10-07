@@ -6,7 +6,8 @@
 	$response = null;
 
 	$recaptcha = new ReCaptcha($secret);
-	echo print_r($_POST);
+if(isset($_POST['submit'])){
+	unset($_POST['submit']);
 	if(isset($_POST["g-recaptcha-response"])){
 		$response= $recaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
 		if($response !=null && $response->success){
@@ -66,6 +67,7 @@
 			$_SESSION['badcreate']="Click the reCaptcha box before submitting.";
 		}
 	}
+}
 ?>
 
 <!DOCTYPE html>
@@ -108,7 +110,7 @@
 		<div id="nav">
 		</div>
 		<center><div class="createusersbox">
-				<form action="newuser.php" method="post">
+				<form action="newuser.php?submit=true" method="post">
 					<div style="margin: 4%;">
 						<span id="message"></span>
 					</div>
