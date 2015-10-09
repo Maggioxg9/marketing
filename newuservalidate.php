@@ -88,15 +88,15 @@
 			}
 		
 		}else{
-			//recaptcha wasnt valid, should technically never get here, error on googles end
+			//recaptcha wasnt valid
 			$_SESSION['badcreate']="Complete the reCaptcha box before submitting.";
-			header("Location:newuser.html");
+			header("Location:sendmail.php");
 			exit();
 		}
 	}else{
 		//user never entered captcha
 		$_SESSION['badcreate']="Click the reCaptcha box before submitting.";
-		header("Location:newuser.html");
+		header("Location:sendmail.php");
 		exit();
 	}
 ?>
