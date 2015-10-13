@@ -76,7 +76,12 @@
 						$conn=null;
 
 						//send confirmation email then redirect to screen telling them
-						$msg= "***PLEASE DO NOT REPLY TO THIS EMAIL IT WILL NEVER BE RECEIVED***\r\n\r\nGreetings ".$firstname.",\r\n\r\nYour account application has been submitted for review.\r\n\r\nUsername- ".$newuser."\r\n\r\nOnce activated, you can edit the details of your account in the \"Account\" tab after logging in.\r\n\r\nYou will receive email notification once your account has been approved.\r\n\r\nThanks for choosing to support and advertise Accel Entertainment,\r\n\r\nThe Accel Entertainment Marketing Team\r\n";
+						$msg= "***PLEASE DO NOT REPLY TO THIS EMAIL IT WILL NEVER BE RECEIVED***\r\n\r\n";
+						$msg.="Greetings ".$firstname.",\r\n\r\n"
+						$msg.="Username: ".$newuser."\r\n\r\nYour account application with this username has been submitted for review.";
+						$msg.="Once activated, you can edit the details of your account in the \"Account\" tab";
+						$msg.=" after logging in. You will receive email notification once your account has been approved.\r\n\r\n\r\n"
+						$msg.="Thanks for choosing to support and advertise Accel Entertainment,\r\n\r\nThe Accel Entertainment Marketing Team\r\n";
 						mail($email, "Account Created, Awaiting Approval", wordwrap($msg, 70), "From: <aemarketingtechsupport@gmail.com>"); 
 						header("Location:usercreated.html");
 						exit();
