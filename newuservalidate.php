@@ -80,7 +80,7 @@
 						$msg.="Greetings ".$firstname.",\r\n\r\n";
 						$msg.="Username: ".$newuser."\r\n\r\nYour account application with this username has been submitted for review.";
 						$msg.="Once activated, you can edit the details of your account in the \"Account\" tab";
-						$msg.=" after logging in. You will receive email notification once your account has been approved.\r\n\r\n\r\n"
+						$msg.=" after logging in. You will receive email notification once your account has been approved.\r\n\r\n\r\n";
 						$msg.="Thanks for choosing to support and advertise Accel Entertainment,\r\n\r\nThe Accel Entertainment Marketing Team\r\n";
 						mail($email, "Account Created, Awaiting Approval", wordwrap($msg, 70), "From: <aemarketingtechsupport@gmail.com>"); 
 						header("Location:usercreated.html");
