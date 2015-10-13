@@ -77,7 +77,7 @@
 
 						//send confirmation email then redirect to screen telling them
 						$msg= "***PLEASE DO NOT REPLY TO THIS EMAIL IT WILL NEVER BE RECEIVED***\r\n\r\n";
-						$msg.="Greetings ".$firstname.",\r\n\r\n"
+						$msg.="Greetings ".$firstname.",\r\n\r\n";
 						$msg.="Username: ".$newuser."\r\n\r\nYour account application with this username has been submitted for review.";
 						$msg.="Once activated, you can edit the details of your account in the \"Account\" tab";
 						$msg.=" after logging in. You will receive email notification once your account has been approved.\r\n\r\n\r\n"
