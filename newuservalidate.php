@@ -74,6 +74,10 @@
 						unset($_SESSION['tmpphone']);
 						unset($_SESSION['tmpref']);
 						$conn=null;
+
+						//send confirmation email then redirect to screen telling them
+						$msg= "***PLEASE DO NOT REPLY TO THIS EMAIL IT WILL NEVER BE RECEIVED***\r\n\r\nGreetings ".$firstname.",\r\n\r\nYour account application has been submitted for review.\r\n\r\nUsername- ".$newuser."\r\n\r\nOnce activated, you can edit the details of your account in the \"Account\" tab after logging in.\r\n\r\nYou will receive email notification once your account has been approved.\r\n\r\nThanks for choosing to support and advertise Accel Entertainment,\r\n\r\nThe Accel Entertainment Marketing Team\r\n";
+						mail($email, "Account Created, Awaiting Approval", wordwrap($msg, 70), "From: <aemarketingtechsupport@gmail.com>"); 
 						header("Location:usercreated.html");
 						exit();
 					}
@@ -88,15 +92,15 @@
 			}
 		
 		}else{
-			//recaptcha wasnt valid
+			//recaptcha wasnt valid, should technically never get here, error on googles end
 			$_SESSION['badcreate']="Complete the reCaptcha box before submitting.";
-			header("Location:sendmail.php");
+			header("Location:newuser.html");
 			exit();
 		}
 	}else{
 		//user never entered captcha
 		$_SESSION['badcreate']="Click the reCaptcha box before submitting.";
-		header("Location:sendmail.php");
+		header("Location:newuser.html");
 		exit();
 	}
 ?>
