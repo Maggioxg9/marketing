@@ -17,9 +17,11 @@
 	$_SESSION['tmpref']= htmlspecialchars($_POST['refcode']);
 	$_SESSION['tmpbtn']= htmlspecialchars($_POST['accounttype']);
 	
-	if(isset($_POST["g-recaptcha-response"])){
-		$response= $recaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
-		if($response !=null && $response->success){
+	// isset($_POST["g-recaptcha-response"])
+	if(true){
+		//$response= $recaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
+		//if($response !=null && $response->success){
+		if(true){
 			if(empty( $_POST["username"])||empty( $_POST["password"])||empty( $_POST["repassword"])||empty( $_POST["firstname"])||empty( $_POST["lastname"])||empty( $_POST["email"])){
 				$_SESSION['badcreate']="Please fill out all fields.";
 				header("Location:newuser.html");
