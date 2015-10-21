@@ -29,6 +29,10 @@
 			}else if( $_POST["password"]!= $_POST["repassword"]){
 				$_SESSION['badcreate']="Passwords must match.";
 				header("Location:newuser.html");
+				exit(); 
+			}else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+				$_SESSION['badcreate']="Please enter a valid email address.";
+				header("Location:newuser.html");
 				exit();
 			}else{
 				//everything is valid, assign variables
@@ -65,7 +69,7 @@
 					}else{
 						//username is free, setup new user
 
-
+						$conn=null;
 						//clear saved variables
 						unset($_SESSION['tmpuser']);
 						unset($_SESSION['tmppass']);
@@ -75,7 +79,7 @@
 						unset($_SESSION['tmpemail']);
 						unset($_SESSION['tmpphone']);
 						unset($_SESSION['tmpref']);
-						$conn=null;
+						$_SESSION['recentlycreated']="true";
 
 						//send confirmation email then redirect to screen telling them
 						$msg= "***PLEASE DO NOT REPLY TO THIS EMAIL IT WILL NEVER BE RECEIVED***\r\n\r\n";
@@ -99,7 +103,7 @@
 			}
 		
 		}else{
-			//recaptcha wasnt valid, should technically never get here, error on googles end
+			//recaptcha wasnt valid
 			$_SESSION['badcreate']="Complete the reCaptcha box before submitting.";
 			header("Location:newuser.html");
 			exit();
