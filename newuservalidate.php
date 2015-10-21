@@ -50,7 +50,6 @@
 				$email= htmlspecialchars($_POST["email"]);
 				$phone= htmlspecialchars($_POST["phone"]);
 				$repid = htmlspecialchars($_POST['refcode']);
-				$gencode = mt_rand(100000000, 999999999);
 				$level="4";
 				$aelevel="2";
 				$rep="";
@@ -74,6 +73,8 @@
 						exit();
 					}else{
 						//username is free, setup new user
+						$gencode = mt_rand(100000000, 999999999);
+						$recoveryPIN=mt_rand(100000000,999999999);
 						if($_SESSION['tmpbtn']=="accelemployee"){
 							
 							//create and execute sql query to check if rep id entered exists and is AE superuser
@@ -91,8 +92,8 @@
 								exit();
 							}
 													
-							$insrt=$conn->prepare("insert into users (username, password, level, email, firstname, lastname, phone, code) values (:newusername, :newpasshash, :level, :newemail, :newfirst, :newlast, :newphone, :newcode)");
-							$insrt->execute(array(':newusername'=>"$newuser",':newpasshash'=>password_hash($newpass,PASSWORD_DEFAULT),':level'=>"$aelevel",':newemail'=>"$email",':newfirst'=>"$firstname",'newlast'=>"$lastname",':newphone'=>"$phone",':newcode'=>"$gencode"));
+							$insrt=$conn->prepare("insert into users (username, password, level, email, firstname, lastname, phone, code, recovery) values (:newusername, :newpasshash, :level, :newemail, :newfirst, :newlast, :newphone, :newcode, :recoverypin)");
+							$insrt->execute(array(':newusername'=>"$newuser",':newpasshash'=>password_hash($newpass,PASSWORD_DEFAULT),':level'=>"$aelevel",':newemail'=>"$email",':newfirst'=>"$firstname",'newlast'=>"$lastname",':newphone'=>"$phone",':newcode'=>"$gencode",':recoverypin'=>"$recoveryPIN"));
 						
 						}else{
 							//create and execute sql query to check if rep id entered exists
@@ -111,8 +112,8 @@
 								header("Location:newuser.html");
 								exit();
 							}			
-							$insrt=$conn->prepare("insert into users (username, password, level, email, firstname, lastname, phone, rep) values (:newusername, :newpasshash, :level, :newemail, :newfirst, :newlast, :newphone, :rep)");
-							$insrt->execute(array(':newusername'=>"$newuser",':newpasshash'=>password_hash($newpass,PASSWORD_DEFAULT),':level'=>"$level",':newemail'=>"$email",':newfirst'=>"$firstname",'newlast'=>"$lastname",':newphone'=>"$phone",':rep'=>"$rep"));
+							$insrt=$conn->prepare("insert into users (username, password, level, email, firstname, lastname, phone, rep, recovery) values (:newusername, :newpasshash, :level, :newemail, :newfirst, :newlast, :newphone, :rep, :recoverypin)");
+							$insrt->execute(array(':newusername'=>"$newuser",':newpasshash'=>password_hash($newpass,PASSWORD_DEFAULT),':level'=>"$level",':newemail'=>"$email",':newfirst'=>"$firstname",'newlast'=>"$lastname",':newphone'=>"$phone",':rep'=>"$rep",'recoverypin'=>"$recoveryPIN"));
 
 						}
 						$conn=null;
@@ -125,14 +126,18 @@
 						unset($_SESSION['tmpemail']);
 						unset($_SESSION['tmpphone']);
 						unset($_SESSION['tmpref']);
+						unset($_SESSION['tmpbtn']);
 						$_SESSION['recentlycreated']="true";
 
 						//send confirmation email then redirect to screen telling them
 						$msg= "***PLEASE DO NOT REPLY TO THIS EMAIL IT WILL NEVER BE RECEIVED***\r\n\r\n";
 						$msg.="Greetings ".$firstname.",\r\n\r\n";
 						$msg.="Username: ".$newuser."\r\n\r\nYour account application with this username has been submitted for review.";
-						$msg.=" Once activated, you can edit the details of your account in the \"Account\" tab";
-						$msg.=" after logging in. You will receive email notification once your account has been approved.\r\n\r\n\r\n";
+						$msg.=" Once approved, you can edit the details of your account in the \"Account\" tab";
+						$msg.=" after logging in. You will receive email notification once your account has been approved. YOU WILL NOT BE ABLE TO LOG IN UNTIL YOUR ACCOUNT HAS BEEN APPROVED!\r\n\r\n";
+						$msg.="Password Recovery PIN: ".$recoveryPIN."\r\n";
+						$msg.="Do not lose this PIN, should you forget your password you will be prompted to enter this PIN in order to ";
+						$msg.="create a new password. If you lose this PIN, you will need to contact your Accel Entertainment Representative to have them resend it.\r\n\r\n\r\n";
 						$msg.="Thank you for choosing to support and advertise Accel Entertainment,\r\n\r\nThe Accel Entertainment Marketing Team\r\n";
 						mail($email, "Account Created, Awaiting Approval", wordwrap($msg, 70), "From: <aemarketingtechsupport@gmail.com>"); 
 						header("Location:usercreated.html");

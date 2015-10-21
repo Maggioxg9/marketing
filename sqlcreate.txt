@@ -7,7 +7,7 @@ create database marketing;
 use marketing;
 
 create table users (userid int NOT NULL AUTO_INCREMENT, username varchar(
-255) NOT NULL, password varchar(255) NOT NULL, level int not null, email varchar(255), firstname varchar(255), lastname varchar(255), phone varchar(50), rep varchar(255),code int, PRIMARY KEY (userid));
+255) NOT NULL, password varchar(255) NOT NULL, level int not null, email varchar(255), firstname varchar(255), lastname varchar(255), phone varchar(50), rep varchar(255),code int,recovery int, PRIMARY KEY (userid));
 
 create table carts (cartid int NOT NULL auto_increment, userid int NOT NULL, foreign key
  (userid) references users (userid), PRIMARY KEY (cartid));

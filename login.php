@@ -53,6 +53,19 @@ try{
 
 		//check if passwords match
 		if(password_verify($newpass, $credentials )){
+			if($userlevel==4){
+				//account not approved yet, no access
+				$_SESSION['badlogin']=true;
+				//close database connection
+				$conn = null;
+
+				//implement a 2 second sleep to prevent brute-force hacking attempts
+				sleep(2);
+
+				//redirect back to login page where a try again message will appear
+				header("Location: login.html");
+				exit();
+			}
 
 			//passwords are a match, setup session variables for website use
 
@@ -64,8 +77,6 @@ try{
 			//get the cartid for this user so it can be set here once for use throughout the website
 			$cartid = $cartresult["cartid"];
 
-			//start the session
-			//session_start();
 
 			//assign global session variables to be used throughout the website
 			$_SESSION['usr'] = "$newuser";

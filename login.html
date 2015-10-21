@@ -21,6 +21,7 @@
 					if($_SESSION['badlogin']==true){
 						echo "Please try again";
 					}
+					unset($_SESSION['badlogin']);
 				}
 				?>
 				<form action="login.php" method="post">
