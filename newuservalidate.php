@@ -13,7 +13,7 @@
 	$_SESSION['tmpfname']= htmlspecialchars($_POST['firstname']);
 	$_SESSION['tmplname']= htmlspecialchars($_POST['lastname']);
 	$_SESSION['tmpemail']= htmlspecialchars($_POST['email']);
-	$_SESSION['tmpphone']= htmlspecialchars($_POST['username']);
+	$_SESSION['tmpphone']= htmlspecialchars($_POST['phone']);
 	$_SESSION['tmpref']= htmlspecialchars($_POST['refcode']);
 	$_SESSION['tmpbtn']= htmlspecialchars($_POST['accounttype']);
 	
@@ -49,6 +49,12 @@
 				$lastname= htmlspecialchars($_POST["lastname"]);
 				$email= htmlspecialchars($_POST["email"]);
 				$phone= htmlspecialchars($_POST["phone"]);
+				$repid = htmlspecialchars($_POST['refcode']);
+				$gencode = random_int(100000000, 999999999);
+				$level="4";
+				$aelevel="2";
+				$rep="";
+				echo "here";
 			
 				try{
 	
@@ -66,9 +72,47 @@
 						$_SESSION['badcreate']="Username already exists, please choose a different username.";
 						$conn=null;
 						header("Location:newuser.html");
+						exit();
 					}else{
 						//username is free, setup new user
+						if($_SESSION['tmpbtn']=="accelemployee"){
+							//create and execute sql query to check if rep id entered exists and is AE superuser
+							$chk= $conn->prepare("select username from users where code= :repid and level= :superlevel");
+							$chk->execute(array(':repid' => "$repid", ':superlevel'=>"1"));
+		
+							//check to see if user record was found
+							if($chk->rowcount() > 0){
+								//rep id exists, continue
+							}else{
+								//no rep id found
+								$_SESSION['badcreate']="Referral code invalid. Enter the code an Accel Entertainment superuser provided.";
+								$conn=null;
+								header("Location:newuser.html");
+								exit();
+							}						
+							$insrt=$conn->prepare("insert into users (username, password, level, email, firstname, lastname, phone, code) values (:newusername, :newpasshash, :level, :newemail, :newfirst, :newlast, :newphone)");
+							$insrt->execute(array(':newusername'=>"$newuser",':newpasshash'=>password_hash($newpass,PASSWORD_DEFAULT),':level'=>"$aelevel",':newemail'=>"$email",':newfirst'=>"$firstname",'newlast'=>"$lastname",':newphone'=>"$phone",':newcode'=>"$gencode"));
+						}else{
+							//create and execute sql query to check if rep id entered exists
+							$chk2= $conn->prepare("select username from users where code= :repid");
+							$chk2->execute(array(':repid' => "$repid"));
+		
+							//check to see if user record was found
+							if($chk2->rowcount() > 0){
+								//rep id exists, continue
+								$result=$chk2->fetch(PDO::FETCH_ASSOC);
+								$rep=$result["username"];
+							}else{
+								//no rep id found
+								$_SESSION['badcreate']="Referral code invalid. Enter the code your rep provided.";
+								$conn=null;
+								header("Location:newuser.html");
+								exit();
+							}			
+							$insrt=$conn->prepare("insert into users (username, password, level, email, firstname, lastname, phone, rep) values (:newusername, :newpasshash, :level, :newemail, :newfirst, :newlast, :newphone, :rep)");
+							$insrt->execute(array(':newusername'=>"$newuser",':newpasshash'=>password_hash($newpass,PASSWORD_DEFAULT),':level'=>"$level",':newemail'=>"$email",':newfirst'=>"$firstname",'newlast'=>"$lastname",':newphone'=>"$phone",':rep'=>"$rep"));
 
+						}
 						$conn=null;
 						//clear saved variables
 						unset($_SESSION['tmpuser']);

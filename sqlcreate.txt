@@ -7,7 +7,7 @@ create database marketing;
 use marketing;
 
 create table users (userid int NOT NULL AUTO_INCREMENT, username varchar(
-255) NOT NULL, password varchar(255) NOT NULL, level int not null, email varchar(255), firstname varchar(255), lastname varchar(255), phone varchar(50), rep varchar(255), PRIMARY KEY (userid));
+255) NOT NULL, password varchar(255) NOT NULL, level int not null, email varchar(255), firstname varchar(255), lastname varchar(255), phone varchar(50), rep varchar(255),code int, PRIMARY KEY (userid));
 
 create table carts (cartid int NOT NULL auto_increment, userid int NOT NULL, foreign key
  (userid) references users (userid), PRIMARY KEY (cartid));
@@ -26,7 +26,7 @@ create table requestitems (requestitemid int not null auto_increment, requestid 
 
 create table orderitems (orderitemid int not null auto_increment, orderid int not null, productid int not null, ud1 varchar(255), ud2 varchar(255), ud3 varchar(255), ud4 varchar(255), ud5 varchar(255), ud6 varchar(255), comments varchar(255), foreign key (orderid) references orders(orderid), foreign key (productid) references products(productid), primary key(orderitemid));
 
-insert into users (username, password, level, email, firstname, lastname, phone) values ("zacharym", "$2y$10$kc5RNma6lNfWh1wZ6nYQBevwP.GEGKojbMT09QgqWGiipQIyvEWdy", "1", "ZacharyM@accelentertainment.com", "Zach", "Maggio", "260-667-8932");
+insert into users (username, password, level, email, firstname, lastname, phone, code) values ("zacharym", "$2y$10$kc5RNma6lNfWh1wZ6nYQBevwP.GEGKojbMT09QgqWGiipQIyvEWdy", "1", "ZacharyM@accelentertainment.com", "Zach", "Maggio", "260-667-8932", 919455319);
 
 insert into users (username,password,  level, email, firstname, lastname, phone) values ("brads", "$2y$10$38O2.g4HwntCeUsmVwQ.teRI8tfcwmTLc13JftqUbDpHpQCcMsPYG", "2", "BradS@accelentertainment.com", "Brad", "Shapiro", "913-596-8950");
 
