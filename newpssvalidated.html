@@ -1,5 +1,7 @@
 <?php 
+	include 'functions.php';
 	session_start();
+	clearSessionBools();
 	if(isset($_SESSION['usr']) && isset($_SESSION['pswd'])){
 		//user logged in proceed
 	}else{

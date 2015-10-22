@@ -1,5 +1,7 @@
 <?php
+	include 'functions.php';
 	session_start();
+	clearSessionBools();
 	if(isset($_SESSION['usr']) && isset($_SESSION['pswd'])){
 		//user logged in proceed
 	}else{
@@ -7,12 +9,20 @@
 		header("Location: login.html");
 		exit();
 	}
-	if(isset($_POST['changingcart'])){
+	if(count($_POST)>0){
+		$_SESSION['tmpchangingcart']=htmlspecialchars($_POST['changingcart']);
+		$_SESSION['tmpremoveid']=htmlspecialchars($_POST['remove']);
+
+		header("HTTP/1.1 303 See Other");
+		header("Location: index.html");
+		exit();
+		
+	}else if(isset($_SESSION['tmpchangingcart'])){
 		$servername = "localhost";
 		$username = "root";
 		$password = "raspberry";
 		$dbname = "marketing";
-		$removeid=htmlspecialchars($_POST["remove"]);
+		$removeid=$_SESSION['tmpremoveid'];
 		$cartid=$_SESSION['cartid'];
 
 		try{
@@ -31,6 +41,9 @@
 			$cartresult= $getcart->fetchAll(PDO::FETCH_ASSOC);
 			$_SESSION['changecart']=true;
 			$_SESSION['cartarray']=json_encode($cartresult);
+
+			unset($_SESSION['tmpchangingcart']);
+			unset($_SESSION['tmpremoveid']);
 			$conn = null;
 		}catch(PDOException $e){
 			echo $result . "<br>" . $e->getMessage();
