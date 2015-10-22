@@ -7,18 +7,18 @@
 		header("Location: login.html");
 		exit();
 	}
-	if(count($_POST) > 0)){
+	if(count($_POST) > 0){
 		$tmpoldpass= htmlspecialchars($_POST['currentpass']);
 		$tmpnewpass= htmlspecialchars($_POST['newpass']);
 		$tmprenewpass= htmlspecialchars($_POST['renewpass']);
 		if(!password_verify($tmpoldpass, $_SESSION['pswd'])){
 			$_SESSION['badchgpss']=true;
-			header("Location: hgpss.html");
+			header("Location: chgpss.html");
 			exit();
 		
 		}else if($tmpnewpass!=$tmprenewpass){
 			$_SESSION['badchgpss']=true;
-			header("Location: hgpss.html");
+			header("Location: chgpss.html");
 			exit();
 		}else{
 			$servername = "localhost";
@@ -33,11 +33,10 @@
 				$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 				//create and execute sql query to update password
+				$newhash= password_hash($tmpnewpass,PASSWORD_DEFAULT);
 				$stmt= $conn->prepare("update users set password=:upass where userid=:userid");
-				$stmt->execute(array(':upass' => password_hash($tmpnewpass,PASSWORD_DEFAULT), ':userid' => "$uid"));
-				$result = $stmt->fetch(PDO::FETCH_ASSOC);
-				$credentials=$result["password"];
-				$_SESSION['pswd'] = "$credentials";
+				$stmt->execute(array(':upass' => "$newhash", ':userid' => "$uid"));
+				$_SESSION['pswd'] = "$newhash";
 				$conn=null;
 
 				//redirect to success page
