@@ -1,10 +1,5 @@
 <?php 
-	include 'functions.php';
 	session_start();
-	clearSessionBools();
-
-
-
 
 	function clearSessionBools(){
 		unset($_SESSION['tmppostbool']);
