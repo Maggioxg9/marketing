@@ -10,16 +10,5 @@
 	}
 
 
-
-	if(isset($_SESSION['usr']) && isset($_SESSION['pswd'])){
-		//user logged, redirect to 404
-		header("Location: notfound.html");
-		exit();
-	}else{
-		//not logged in, redirect to login
-		header("Location: login.html");
-		exit();
-	}
-
 	
 ?>
