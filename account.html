@@ -109,8 +109,6 @@
 							$var= htmlspecialchars($_SESSION['tmppostbool']);
 						}
 						echo $var; ?>"; 
-			console.log("after");
-			console.log(check);
 			var change= document.getElementById("changefieldboolean");
 			var ufname = document.getElementById("userfirstname");
 			var ulname = document.getElementById("userlastname");
@@ -118,8 +116,6 @@
 			var uphone = document.getElementById("userphone");
 			var ebutton= document.getElementById("editbutton");
 			var epass=document.getElementById("userpass");
-			var debug="<?php echo $_SESSION['tmppostbool']; ?>";
-			console.log(debug);
 			if(<?php if(isset($_SESSION['tmppostbool'])){
 						echo "true";
 						}else{
