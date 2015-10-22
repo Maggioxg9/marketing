@@ -259,8 +259,19 @@ div.createdetails#referralfield{
 	text-align: right;
 	padding-right: 5%;
 }
-div#createbtn{
-	
+div.chgpss{
+	background: white;
+	height:420px;
+	width:600px;
+	display:inline-block;
+	margin: 1em 0 1em 0;
+	position:relative;
 }
-	
+div.chgpssdetails{
+	margin:10% 15% 0 0;
+	color:black;
+	text-align:right;
+
+
+}
 	

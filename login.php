@@ -80,7 +80,7 @@ try{
 
 			//assign global session variables to be used throughout the website
 			$_SESSION['usr'] = "$newuser";
-			$_SESSION['pswd'] = "$newpass";
+			$_SESSION['pswd'] = "$credentials";
 			$_SESSION['badlogin'] = false;
 			$_SESSION['cartid'] = $cartid;
 			$_SESSION['uid'] = $userid;

@@ -1,5 +1,7 @@
 <?php
+	include 'functions.php';
 	session_start();
+	clearSessionBools();
 	if(isset($_SESSION['usr']) && isset($_SESSION['pswd'])){
 		//user is logged in, proceed
 	}else{
@@ -22,8 +24,11 @@
 			<center><img src="back1.png"></center>
 		</div>
 		<div id="nav">
+			<ul>
+				<li><a href="account.html">Back to Account</a></li>
+			</ul>
 		</div>
-		<center><div class="loginbox">
+		<center><div class="chgpss">
 				<?php if(isset($_SESSION['badchgpss'])){
 					if($_SESSION['badchgpss']==true){
 						echo "Try again. Make sure current password is valid and the new passwords match.";
@@ -32,15 +37,15 @@
 				}
 				?>
 				<form action="chgpss.php" method="post">
-					<div class="logindetails">
+					<div class="chgpssdetails">
 						<span class="formfont">Current password:</span>
 							<input class="textbox" type="password" name="currentpass" size="20" maxlength="20">
 					</div>
-					<div class="logindetails">
+					<div class="chgpssdetails">
 						<span class="formfont">New password:</span>
 							<input class="textbox" type="password" name="newpass" size="20" maxlength="20">
 					</div>
-					<div class="logindetails">
+					<div class="chgpssdetails">
 						<span class="formfont">Re-enter new password:</span>
 							<input class="textbox" type="password" name="renewpass" size="20" maxlength="20">
 					</div>
@@ -51,10 +56,10 @@
 -->
 
 
-					<div id="loginbtn">
+					<center><div>
 						<br>
 						<input id="chgpssbutton" type="submit" value="Submit Change">
-					</div>
+					</div></center>
 					
 				</form>
 				<script src='https://www.google.com/recaptcha/api.js'></script>

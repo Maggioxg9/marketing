@@ -7,22 +7,31 @@
 		header("Location: login.html");
 		exit();
 	}
+	//this will handle confirm resubmittion errors by implementing PRG using single file
+	if(count($_POST) >0){
+		$_SESSION['tmppostbool']=htmlspecialchars($_POST['changefieldboolean']);
+		$_SESSION['tmppostemail']=htmlspecialchars($_POST['email']);
+		$_SESSION['tmppostuserfname']=htmlspecialchars($_POST['userfname']);
+		$_SESSION['tmppostuserlname']=htmlspecialchars($_POST['userlname']);
+		$_SESSION['tmppostphone']=htmlspecialchars($_POST['phone']);
 
-
-	if(isset($_POST['changefieldboolean'])){
-		if($_POST['changefieldboolean']=="no"){
+		header("HTTP/1.1 303 See Other");
+		header("Location: account.html");
+		exit();
+	}else if(isset($_SESSION['tmppostbool'])){
+		if($_SESSION['tmppostbool']=="no"){
 		
 			//database constants
 			$servername = "localhost";
 			$username = "root";
 			$password = "raspberry";
 			$dbname = "marketing";
-			$uemail= htmlspecialchars($_POST['email']);
+			$uemail= $_SESSION['tmppostemail'];
 			$uid=$_SESSION['uid'];
 			$userlevel=$_SESSION['ulevel'];
-			$ufname= htmlspecialchars($_POST['userfname']);
-			$ulname= htmlspecialchars($_POST['userlname']);
-			$uphone= htmlspecialchars($_POST['phone']);
+			$ufname= $_SESSION['tmppostuserfname'];
+			$ulname= $_SESSION['tmppostuserlname'];
+			$uphone= $_SESSION['tmppostphone'];
 			$newuser=$_SESSION['usr'];
 
 			try{
@@ -66,10 +75,14 @@
 				//close database connection
 				$conn = null;
 			}
-		unset($_POST['changefieldboolean']);
+			unset($_SESSION['tmppostbool']);
+			unset($_SESSION['tmppostemail']);
+			unset($_SESSION['tmppostuserfname']);
+			unset($_SESSION['tmppostuserlname']);
+			unset($_SESSION['tmppostphone']);
 		}
+	
 	}
-
 ?>
 
 <!DOCTYPE html>
@@ -92,10 +105,12 @@
 		function initializeAccountDetails(){
 			var check = "<?php
 						$var="";
-						if(isset($_POST['changefieldboolean'])){
-							$var= htmlspecialchars($_POST['changefieldboolean']);
+						if(isset($_SESSION['tmppostbool'])){
+							$var= htmlspecialchars($_SESSION['tmppostbool']);
 						}
 						echo $var; ?>"; 
+			console.log("after");
+			console.log(check);
 			var change= document.getElementById("changefieldboolean");
 			var ufname = document.getElementById("userfirstname");
 			var ulname = document.getElementById("userlastname");
@@ -103,7 +118,9 @@
 			var uphone = document.getElementById("userphone");
 			var ebutton= document.getElementById("editbutton");
 			var epass=document.getElementById("userpass");
-			if(<?php if(isset($_POST['changefieldboolean'])){
+			var debug="<?php echo $_SESSION['tmppostbool']; ?>";
+			console.log(debug);
+			if(<?php if(isset($_SESSION['tmppostbool'])){
 						echo "true";
 						}else{
 						echo "false";
@@ -256,7 +273,7 @@
 					Phone: <input id="userphone" class="userfield" type="text" name="phone" value="<?php echo $_SESSION['uphone']; ?>">
 				</div>
 				<div id="upass" class="accountfield">
-					Password: <input id="userpass" class="userfield" type="button" name="pass" value="Change Password" onclick="location.href='chgpss.php';">
+					Password: <input id="userpass" class="userfield" type="button" name="pass" value="Change Password" onclick="location.href='chgpss.html';">
 				</div>
 				<div id="editaccount">
 				<center><input id="editbutton" type="submit" name="editbutton" value="Edit Details"></center>
