@@ -76,6 +76,7 @@
 <html>
 	<head>
 	<link rel="stylesheet" type="text/css" href="style.css">
+			
 
 	<script>
 		function editAccountInfo(){
@@ -101,6 +102,7 @@
 			var uemail = document.getElementById("useremail");
 			var uphone = document.getElementById("userphone");
 			var ebutton= document.getElementById("editbutton");
+			var epass=document.getElementById("userpass");
 			if(<?php if(isset($_POST['changefieldboolean'])){
 						echo "true";
 						}else{
@@ -116,6 +118,7 @@
 					uemail.readOnly=false;
 					uphone.disabled=false;
 					uphone.readOnly=false;
+					epass.disabled=false;
 				}
 			}else{
 				// boolean is not set, either on initial page load or because the save operation is over 
@@ -130,6 +133,8 @@
 				uemail.readOnly=true;
 				uphone.disabled=true;
 				uphone.readOnly=true;
+				epass.disabled=true;
+				
 			}
 		}
 		</script>
@@ -249,6 +254,9 @@
 				</div>
 				<div id="uphone" class="accountfield">
 					Phone: <input id="userphone" class="userfield" type="text" name="phone" value="<?php echo $_SESSION['uphone']; ?>">
+				</div>
+				<div id="upass" class="accountfield">
+					Password: <input id="userpass" class="userfield" type="button" name="pass" value="Change Password" onclick="location.href='chgpss.php';">
 				</div>
 				<div id="editaccount">
 				<center><input id="editbutton" type="submit" name="editbutton" value="Edit Details"></center>
