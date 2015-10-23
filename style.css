@@ -204,7 +204,7 @@ div#accountsummary{
 	margin-left: 1em;
 	margin-right: 1em;
 	width: 400px;
-	height: 500px;
+	height: 600px;
 	background: white;
 	font-family: Arial, Helvetica, sans-serif; 
 	font-size: 1.5em;
@@ -217,8 +217,8 @@ div#usersummary{
 	margin-top: 1em;
 	margin-left: 1em;
 	margin-right: 1em;
-	width: 800px;
-	height: 500px;
+	width: 1000px;
+	height: 600px;
 	background: white;
 	font-family: Arial, Helvetica, sans-serif; 
 	font-size: 1.5em;
@@ -260,9 +260,15 @@ input.userfield{
 	right: 10%;
 	width: 50%;
 }
+input.passfield{
+	position: absolute;
+	margin-top: .5%;
+	right: 26.5%;
+	width: 38%;
+}
 
 input#editbutton{
-	margin-top:5%;
+	margin-top:8%;
 	width: 120px;
 	height: 35px;
 }
@@ -281,33 +287,47 @@ input#editbutton{
 .usercell{
 	float:left;
 	font-size: .5em;
-	width: 10%;
+	width: 8%;
 	overflow:auto;
-	margin: 1%;
+	margin: .8%;
 }
 
 .divemail{
 	float:left;
 	font-size: .5em;
-	width: 25%;
+	width: 20%;
 	overflow:auto;
-	margin: 1%;
+	margin: .8%;
 }
 
 .divusername{
 	float:left;
 	font-size: .5em;
-	width: 15%;
+	width: 11.5%;
 	overflow:auto;
-	margin: 1%;
+	margin: .8%;
 }
 
 .divphone{
 	float:left;
 	font-size: .5em;
-	width: 13%;
+	width: 9%;
 	overflow:auto;
-	margin: 1%;
+	margin: .8%;
+}
+.divwebaccess{
+	float:left;
+	font-size: .5em;
+	width: 12%;
+	overflow:auto;
+	margin: .8%;
+}
+.divpinreset{
+	float:left;
+	font-size: .5em;
+	width: 7%;
+	overflow:auto;
+	margin: .8%;
 }
 
 .createusersbox{

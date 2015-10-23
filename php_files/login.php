@@ -35,7 +35,7 @@
 				$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	
 				//create and execute sql query to check login info
-				$stmt= $conn->prepare("select userid,level,email,firstname,lastname,phone,password from users where username= :name");
+				$stmt= $conn->prepare("select userid,level,email,firstname,lastname,phone,password,code from users where username= :name");
 				$stmt->execute(array(':name' => "$newuser"));
 
 				//check to see if user record was found
@@ -52,6 +52,7 @@
 					$userfirstname = $result["firstname"];
 					$userlastname = $result["lastname"];
 					$userphone = $result["phone"];
+					$refcode=$result["code"];
 
 					//check if passwords match
 					if(password_verify($newpass, $credentials )){
@@ -91,6 +92,7 @@
 						$_SESSION['ufname'] = "$userfirstname";
 						$_SESSION['ulname'] = "$userlastname";
 						$_SESSION['uphone'] = "$userphone";
+						$_SESSION['ucode'] = "$refcode";
 		
 						//create and execute sql query to load any previously saved shopping cart items	
 						$getcart = $conn->prepare("select products.name, cartitems.ud1,cartitems.ud2,cartitems.ud3,cartitems.ud4,cartitems.ud5,cartitems.ud6,cartitems.comments, cartitems.cartitemid from cartitems inner join products on cartitems.productid=products.productid where cartitems.cartid = :newcart");

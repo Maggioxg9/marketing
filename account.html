@@ -251,10 +251,13 @@
 		</div>
 		<div id="accountsummary">
 			<center>Account Details</center>
-			<form action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> method="post" onsubmit="editAccountInfo()">
+			<form action=<?php echo $_SERVER["PHP_SELF"]; ?> method="post" onsubmit="editAccountInfo()">
 				<input id="changefieldboolean" type="hidden" name="changefieldboolean">
 				<div id="uname" class="accountfield">
 					Username: <input id="username" class="userfield" type="text" name="username" value="<?php echo $_SESSION['usr']; ?>" readonly="readonly" disabled="disabled">
+				</div>
+				<div id="uname" class="accountfield">
+					Referral Id: <input id="refcode" class="userfield" type="text" name="refcode" value="<?php echo $_SESSION['ucode']; ?>" readonly="readonly" disabled="disabled">
 				</div>
 				<div id="ufname" class="accountfield">
 					First Name: <input id="userfirstname" class="userfield" type="text" name="userfname" value="<?php echo $_SESSION['ufname']; ?>">
@@ -269,7 +272,7 @@
 					Phone: <input id="userphone" class="userfield" type="text" name="phone" value="<?php echo $_SESSION['uphone']; ?>">
 				</div>
 				<div id="upass" class="accountfield">
-					Password: <input id="userpass" class="userfield" type="button" name="pass" value="Change Password" onclick="location.href='chgpss.html';">
+					Password: <input id="userpass" class="passfield" type="button" name="pass" value="Change Password" onclick="location.href='chgpss.html';">
 				</div>
 				<div id="editaccount">
 				<center><input id="editbutton" type="submit" name="editbutton" value="Edit Details"></center>
@@ -291,6 +294,8 @@
 				<div class="divemail">E-Mail</div>
 				<div class="divphone">Phone</div>
 				<div class="divusername">Assigned Rep.</div>
+				<div class="divwebaccess">Web Access.</div>
+				<div class="divpinreset">Password.</div>
 				<div class="clear"></div>
 				<table id="userstable">
 				</table>
