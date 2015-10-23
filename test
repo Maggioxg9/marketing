@@ -1,4 +1,0 @@
-//RewriteEngne on
-//RewriteCond %{HTTP_REFERER} !^$
-//RewriteCond %{HTTP_REFERER} !^http://192.169.168.67/.*$ [NC]
-//RewriteRule \.(js|css)$ http://192.169.168.67/html/notfound.html [R,L]
