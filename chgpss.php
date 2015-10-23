@@ -55,7 +55,7 @@
 
 	}else{
 		//redirect to homepage, user typed the url in		
-		header("Location: index.html");
+		header("Location: notfound.html");
 		exit();
 	}
 ?>
