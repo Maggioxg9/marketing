@@ -1,5 +1,5 @@
 <?php
-	include 'functions.php';
+	include 'php_files/functions.php';
 	session_start();
 	clearSessionBools();
 	if(isset($_SESSION['usr']) && isset($_SESSION['pswd'])){
@@ -25,6 +25,7 @@
 		<div id="nav">
 		
 		<ul>
+			<li><a href="index.html">Home</a></li>
 			<li><a href="neons.html">Neons</a></li>
 			<li><a href="coasters.html">Coasters</a></li>
 			<li><a href="seat_cards.html">Seat Cards</a></li>
@@ -34,7 +35,7 @@
 			<li><a href="banners.html">Banners</a></li>
 			<li><a href="misc.html">Misc.</a></li>
 			<li><a href="account.html">Account</a></li>
-			<li><a href="logoff.php">Sign Out</a></li>
+			<li><a href="php_files/logoff.php">Sign Out</a></li>
 		</ul>
 	
 		</div>

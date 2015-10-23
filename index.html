@@ -1,5 +1,5 @@
 <?php
-	include 'functions.php';
+	include 'php_files/functions.php';
 	session_start();
 	clearSessionBools();
 	if(isset($_SESSION['usr']) && isset($_SESSION['pswd'])){
@@ -106,7 +106,7 @@
 <body>
 	<div id="container">
 		<div id="header">
-			<center><img src="back1.png"></center>
+			<center><img src="resources/back1.png"></center>
 		</div>
 		<div id="nav">
 		
@@ -121,7 +121,7 @@
 			<li><a href="banners.html">Banners</a></li>
 			<li><a href="misc.html">Misc.</a></li>
 			<li><a href="account.html">Account</a></li>
-			<li><a href="logoff.php">Sign Out</a></li>
+			<li><a href="php_files/logoff.php">Sign Out</a></li>
 		</ul>
 	
 		</div>
@@ -130,45 +130,45 @@
 				<tr>
 					<td>
 						<div class="itembox">
-							<img class="imgicon" src="neons.png">
-							<form action="addcart.php" method="post">
+							<img class="imgicon" src="resources/neons.png">
+							<form action="php_files/addcart.php" method="post">
 							<input type="hidden" name="producturl" value="neons.png">
 							<input type="hidden" name="returnurl" value="index.html">
 							<div class="details">Color:<input type="text" name="color" size="10" maxlength="10"></div>
 							<div class="details">Size:<input type="text" name="size" size="10" maxlength="10"></div>
 							<div class="details">QTY:<input type="text" name="qty" size="10" maxlength="5"></div>
 							<div class="addbutton">
-								<input type="image" src="addbtn.png" name="neons" alt="Add to cart Button" width="105" height="45">
+								<input type="image" src="resources/addbtn.png" name="neons" alt="Add to cart Button" width="105" height="45">
 								</div>
 							</form>
 						</div>
 					</td>
 					<td>
 						<div class="itembox">
-							<form action="addcart.php" method="post">
+							<form action="php_files/addcart.php" method="post">
 							<input type="hidden" name="producturl" value="coasters.png">
 							<input type="hidden" name="returnurl" value="index.html">
 							<div class="details">Color:<input type="text" name="color" size="10" maxlength="10"></div>
 							<div class="details">Size:<input type="text" name="size" size="10" maxlength="10"></div>
 							<div class="details">QTY:<input type="text" name="qty" size="10" maxlength="5"></div>
-							<img class="imgicon" src="coasters.png">
+							<img class="imgicon" src="resources/coasters.png">
 							<div class="addbutton">
-								<input type="image" src="addbtn.png" name="neons" alt="Add to cart Button" width="105" height="45">
+								<input type="image" src="resources/addbtn.png" name="neons" alt="Add to cart Button" width="105" height="45">
 								</div>
 							</form>
 						</div>
 					</td>
 					<td>
 						<div class="itembox">
-							<form action="addcart.php" method="post">
+							<form action="php_files/addcart.php" method="post">
 							<input type="hidden" name="producturl" value="seatcards.png">
 							<input type="hidden" name="returnurl" value="index.html">
 							<div class="details">Color:<input type="text" name="color" size="10" maxlength="10"></div>
 							<div class="details">Size:<input type="text" name="size" size="10" maxlength="10"></div>
 							<div class="details">QTY:<input type="text" name="qty" size="10" maxlength="5"></div>
-							<img class="imgicon" src="seatcards.png">
+							<img class="imgicon" src="resources/seatcards.png">
 							<div class="addbutton">
-								<input type="image" src="addbtn.png" name="neons" alt="Add to cart Button" width="105" height="45">
+								<input type="image" src="resources/addbtn.png" name="neons" alt="Add to cart Button" width="105" height="45">
 								</div>
 							</form>
 						</div>
@@ -177,45 +177,45 @@
 				<tr>
 					<td>
 						<div class="itembox">
-							<form action="addcart.php" method="post">
+							<form action="php_files/addcart.php" method="post">
 							<input type="hidden" name="producturl" value="koozies.png">
 							<input type="hidden" name="returnurl" value="index.html">
 							<div class="details">Color:<input type="text" name="color" size="10" maxlength="10"></div>
 							<div class="details">Size:<input type="text" name="size" size="10" maxlength="10"></div>
 							<div class="details">QTY:<input type="text" name="qty" size="10" maxlength="5"></div>
-							<img class="imgicon" src="koozies.png">
+							<img class="imgicon" src="resources/koozies.png">
 							<div class="addbutton">
-								<input type="image" src="addbtn.png" name="neons" alt="Add to cart Button" width="105" height="45">
+								<input type="image" src="resources/addbtn.png" name="neons" alt="Add to cart Button" width="105" height="45">
 								</div>
 							</form>
 						</div>
 					</td>
 					<td>
 						<div class="itembox">
-							<form action="addcart.php" method="post">
+							<form action="php_files/addcart.php" method="post">
 							<input type="hidden" name="producturl" value="flags.png">
 							<input type="hidden" name="returnurl" value="index.html">
 							<div class="details">Color:<input type="text" name="color" size="10" maxlength="10"></div>
 							<div class="details">Size:<input type="text" name="size" size="10" maxlength="10"></div>
 							<div class="details">QTY:<input type="text" name="qty" size="10" maxlength="5"></div>
-							<img class="imgicon" src="flags.png">
+							<img class="imgicon" src="resources/flags.png">
 							<div class="addbutton">
-								<input type="image" src="addbtn.png" name="neons" alt="Add to cart Button" width="105" height="45">
+								<input type="image" src="resources/addbtn.png" name="neons" alt="Add to cart Button" width="105" height="45">
 								</div>
 							</form>
 						</div>
 					</td>
 					<td>
 						<div class="itembox">
-							<form action="addcart.php" method="post">
+							<form action="php_files/addcart.php" method="post">
 							<input type="hidden" name="producturl" value="t-shirts.png">
 							<input type="hidden" name="returnurl" value="index.html">
 							<div class="details">Color:<input type="text" name="color" size="10" maxlength="10"></div>
 							<div class="details">Size:<input type="text" name="size" size="10" maxlength="10"></div>
 							<div class="details">QTY:<input type="text" name="qty" size="10" maxlength="5"></div>
-							<img class="imgicon" src="t-shirts.png">
+							<img class="imgicon" src="resources/t-shirts.png">
 							<div class="addbutton">
-								<input type="image" src="addbtn.png" name="neons" alt="Add to cart Button" width="105" height="45">
+								<input type="image" src="resources/addbtn.png" name="neons" alt="Add to cart Button" width="105" height="45">
 								</div>
 							</form>
 						</div>
@@ -234,7 +234,7 @@
 				</script>
 			<div id="checkout">
 				<a href="checkout.html">
-					<center><input type="image" src="button1.png" alt="Check Out" width="150" height="40"></center>
+					<center><input type="image" src="resources/button1.png" alt="Check Out" width="150" height="40"></center>
 				</a>
 			</div>
 		</div>

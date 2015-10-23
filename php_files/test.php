@@ -6,7 +6,7 @@
 		//user logged in proceed
 	}else{
 		//not logged in, redirect to login
-		header("Location: login.html");
+		header("Location: ../login.html");
 		exit();
 	}
 ?>
@@ -19,13 +19,14 @@
 	</head>
 	
 <body>
+hi
 	<div id="container">
 		<div id="header">
-			<center><img src="resources/back1.png"></center>
+			<center><img src="../resources/back1.png"></center>
 		</div>
 		<div id="nav">
 			<ul>
-				<li><a href="index.html">Back to Home</a></li>
+				<li><a href="../index.html">Back to Home</a></li>
 			</ul>
 		</div>
 		<center><div class="createusersbox" style="height:300px">

@@ -65,7 +65,7 @@
 							sleep(2);
 	
 							//redirect back to login page where a try again message will appear
-							header("Location: login.html");
+							header("Location: ../login.html");
 							exit();
 						}
 	
@@ -120,7 +120,7 @@
 
 			
 						//redirect to homepage where shopping cart will be parsed from the session variable
-						header("Location: index.html");
+						header("Location: ../index.html");
 						exit();
 					}else{
 
@@ -134,7 +134,7 @@
 						sleep(2);
 
 						//redirect back to login page where a try again message will appear
-						header("Location: login.html");
+						header("Location: ../login.html");
 						exit();
 					}
 				}else{
@@ -149,7 +149,7 @@
 					sleep(2);
 
 					//redirect back to login page where a try again message will appear
-					header("Location: login.html");
+					header("Location: ../login.html");
 					exit();
 				}
 			}catch(PDOException $e){
@@ -162,12 +162,12 @@
 			}
 		}else{
 			//captcha wasnt clicked or bot found
-			header("Location: login.html");
+			header("Location: ../login.html");
 			exit();
 		}
 	}else{
 		//request didnt come from login.html, redirect to that
-		header("Location: login.html");
+		header("Location: ../login.html");
 		exit();
 	}
 ?>

@@ -26,15 +26,15 @@
 			if(true){
 				if(empty( $_POST["username"])||empty( $_POST["password"])||empty( $_POST["repassword"])||empty( $_POST["firstname"])||empty( $_POST["lastname"])||empty( $_POST["email"])){
 					$_SESSION['badcreate']="Please fill out all fields.";
-					header("Location:newuser.html");
+					header("Location: ../newuser.html");
 					exit();
 				}else if( $_POST["password"]!= $_POST["repassword"]){
 					$_SESSION['badcreate']="Passwords must match.";
-					header("Location:newuser.html");
+					header("Location: ../newuser.html");
 					exit(); 
 				}else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
 					$_SESSION['badcreate']="Please enter a valid email address.";
-					header("Location:newuser.html");
+					header("Location: ../newuser.html");
 					exit();
 				}else{
 					//everything is valid, assign variables
@@ -71,7 +71,7 @@
 							//user already exists
 							$_SESSION['badcreate']="Username already exists, please choose a different username.";
 							$conn=null;
-							header("Location:newuser.html");
+							header("Location: ../newuser.html");
 							exit();
 						}else{
 							//username is free, setup new user
@@ -90,7 +90,7 @@
 									//no rep id found
 									$_SESSION['badcreate']="Referral code invalid. Enter the code an Accel Entertainment superuser provided.";
 									$conn=null;
-									header("Location:newuser.html");
+									header("Location: ../newuser.html");
 									exit();
 								}
 														
@@ -111,7 +111,7 @@
 									//no rep id found
 									$_SESSION['badcreate']="Referral code invalid. Enter the code your rep provided.";
 									$conn=null;
-									header("Location:newuser.html");
+									header("Location: ../newuser.html");
 									exit();
 								}			
 								$insrt=$conn->prepare("insert into users (username, password, level, email, firstname, lastname, phone, rep, recovery) values (:newusername, :newpasshash, :level, :newemail, :newfirst, :newlast, :newphone, :rep, :recoverypin)");
@@ -142,7 +142,7 @@
 							$msg.="create a new password. If you lose this PIN, you will need to contact your Accel Entertainment Representative to have them resend it.\r\n\r\n\r\n";
 							$msg.="Thank you for choosing to support and advertise Accel Entertainment,\r\n\r\nThe Accel Entertainment Marketing Team\r\n";
 							mail($email, "Account Created, Awaiting Approval", wordwrap($msg, 70), "From: <aemarketingtechsupport@gmail.com>"); 
-							header("Location:usercreated.html");
+							header("Location: ../usercreated.html");
 							exit();
 						}
 					}catch(PDOException $e){
@@ -158,18 +158,18 @@
 			}else{
 				//recaptcha wasnt valid
 				$_SESSION['badcreate']="Complete the reCaptcha box before submitting.";
-				header("Location:newuser.html");
+				header("Location: ../newuser.html");
 				exit();
 			}
 		}else{
 			//user never entered captcha
 			$_SESSION['badcreate']="Click the reCaptcha box before submitting.";
-			header("Location:newuser.html");
+			header("Location: ../newuser.html");
 			exit();
 		}
 	}else{
 		//request didnt come from newuser.html, redirect there
-		header("Location: newuser.html");
+		header("Location: ../newuser.html");
 		exit();
 	}
 ?>

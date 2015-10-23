@@ -4,7 +4,7 @@
 		//user logged in proceed
 	}else{
 		//not logged in, redirect to login
-		header("Location: login.html");
+		header("Location: ../login.html");
 		exit();
 	}
 	if(count($_POST) > 0){
@@ -13,12 +13,12 @@
 		$tmprenewpass= htmlspecialchars($_POST['renewpass']);
 		if(!password_verify($tmpoldpass, $_SESSION['pswd'])){
 			$_SESSION['badchgpss']=true;
-			header("Location: chgpss.html");
+			header("Location: ../chgpss.html");
 			exit();
 		
 		}else if($tmpnewpass!=$tmprenewpass){
 			$_SESSION['badchgpss']=true;
-			header("Location: chgpss.html");
+			header("Location: ../chgpss.html");
 			exit();
 		}else{
 			$servername = "localhost";
@@ -40,7 +40,7 @@
 				$conn=null;
 
 				//redirect to success page
-				header("Location: newpssvalidated.html");
+				header("Location: ../newpssvalidated.html");
 
 			}catch(PDOException $e){
 		
@@ -55,7 +55,7 @@
 
 	}else{
 		//redirect to homepage, user typed the url in		
-		header("Location: notfound.html");
+		header("Location: ../notfound.html");
 		exit();
 	}
 ?>

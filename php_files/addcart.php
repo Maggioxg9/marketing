@@ -5,7 +5,7 @@
 		//user is logged in, proceed
 	}else{
 		//not logged in, redirect to login page
-		header("Location: login.html");
+		header("Location: ../login.html");
 		exit();
 	}
 	if(count($_POST) > 0){
@@ -56,7 +56,7 @@
 		
 			//refresh page
 			$conn = null;
-			header("Location: $returnurl");
+			header("Location: ../$returnurl");
 			exit();
 		
 		}catch(PDOException $e){
@@ -67,7 +67,7 @@
 		} 
 	}else{
 		//user typed in url, redirect to page not found
-		header("Location: notfound.html");
+		header("Location: ../notfound.html");
 		exit();
 	}	
 ?>
