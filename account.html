@@ -15,6 +15,7 @@
 			//post came from webaccess+pin
 			$_SESSION['tmpsubmit']= $_POST['submit'];
 			$_SESSION['tmphiddenid']=$_POST['hiddenid'];
+			$_SESSION['printchk']=$_POST;
 			if(!empty($_POST['hiddencode'])){
 				$_SESSION['tmphiddencode']=$_POST['hiddencode'];
 			}
@@ -117,14 +118,15 @@
 			}
 			try{
 
+				$_SESSION['printchk'].="here";
 				//create a database connection
 				$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 				$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+				$_SESSION['printchk'].=$level;
 				//create and execute sql query to update user info
 				$stmt= $conn->prepare("update users set level=:level where userid=:userid");
 				$stmt->execute(array(':level'=>"$level",':userid' => "$uid"));
-				
+				$_SESSION['printchk'].="there";
 
 				//create and execute sql query to update userarray if level 1 or 2 account
 				if($userlevel ==1){
@@ -240,7 +242,7 @@
 
 			}
 
-		</scrip>
+		</script>
 		<script>
 			function resendPin(){
 
