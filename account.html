@@ -9,11 +9,22 @@
 	}
 	//this will handle confirm resubmittion errors by implementing PRG using single file
 	if(count($_POST) >0){
-		$_SESSION['tmppostbool']=htmlspecialchars($_POST['changefieldboolean']);
-		$_SESSION['tmppostemail']=htmlspecialchars($_POST['email']);
-		$_SESSION['tmppostuserfname']=htmlspecialchars($_POST['userfname']);
-		$_SESSION['tmppostuserlname']=htmlspecialchars($_POST['userlname']);
-		$_SESSION['tmppostphone']=htmlspecialchars($_POST['phone']);
+
+		//determine if the POST is edit details, or webaccess+pin
+		if(isset($_POST['submit'])){
+			//post came from webaccess+pin
+			$_SESSION['tmpsubmit']= $_POST['submit'];
+			$_SESSION['tmphiddenid']=$_POST['hiddenid'];
+			if(!empty($_POST['hiddencode'])){
+				$_SESSION['tmphiddencode']=$_POST['hiddencode'];
+			}
+		}else{
+			$_SESSION['tmppostbool']=htmlspecialchars($_POST['changefieldboolean']);
+			$_SESSION['tmppostemail']=htmlspecialchars($_POST['email']);
+			$_SESSION['tmppostuserfname']=htmlspecialchars($_POST['userfname']);
+			$_SESSION['tmppostuserlname']=htmlspecialchars($_POST['userlname']);
+			$_SESSION['tmppostphone']=htmlspecialchars($_POST['phone']);
+		}
 
 		header("HTTP/1.1 303 See Other");
 		header("Location: account.html");
@@ -47,12 +58,12 @@
 
 				//create and execute sql query to update userarray if level 1 or 2 account
 				if($userlevel ==1){
-					$getusers = $conn->prepare("select username, email, firstname, lastname, phone from users order by lastname asc");
+					$getusers = $conn->prepare("select userid, username, email, firstname, lastname, phone, rep, level from users order by lastname asc");
 					$getusers->execute();
 					$allusers= $getusers->fetchAll(PDO::FETCH_ASSOC);
 					$_SESSION['userarray']=json_encode($allusers);
 				}else if($userlevel ==2){
-					$getusers = $conn->prepare("select username, email, firstname, lastname, phone, rep from users where rep=:rep order by lastname asc");
+					$getusers = $conn->prepare("select userid, username, email, firstname, lastname, phone, rep, level from users where rep=:rep order by lastname asc");
 					$getusers->execute(array(':rep' => "$newuser"));
 					$allusers= $getusers->fetchAll(PDO::FETCH_ASSOC);
 					$_SESSION['userarray']=json_encode($allusers);
@@ -82,6 +93,66 @@
 			unset($_SESSION['tmppostphone']);
 		}
 	
+	}
+	if(isset($_SESSION['tmpsubmit'])){
+			//database constants
+			$servername = "localhost";
+			$username = "root";
+			$password = "raspberry";
+			$dbname = "marketing";
+			$uid=$_SESSION['tmphiddenid'];
+			$hcode=$_SESSION['tmphiddencode'];
+			$newuser=$_SESSION['usr'];
+			$level=6;
+
+			if($_SESSION['tmpsubmit']=="Activate"){
+				if(empty($hcode])){
+					$level=3;
+				}else{
+					$level=2;
+				}
+			}else{
+				$level=4;
+			}
+			try{
+
+				//create a database connection
+				$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+				$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+				//create and execute sql query to update user info
+				$stmt= $conn->prepare("update users set level=:level where userid=:userid");
+				$stmt->execute(array(':level'=>"$level",':userid' => "$uid"));
+				
+
+				//create and execute sql query to update userarray if level 1 or 2 account
+				if($userlevel ==1){
+					$getusers = $conn->prepare("select userid, username, email, firstname, lastname, phone, rep, code, level from users order by lastname asc");
+					$getusers->execute();
+					$allusers= $getusers->fetchAll(PDO::FETCH_ASSOC);
+					$_SESSION['userarray']=json_encode($allusers);
+				}else if($userlevel ==2){
+					$getusers = $conn->prepare("select userid, username, email, firstname, lastname, phone, rep, code, level from users where rep=:rep order by lastname asc");
+					$getusers->execute(array(':rep' => "$newuser"));
+					$allusers= $getusers->fetchAll(PDO::FETCH_ASSOC);
+					$_SESSION['userarray']=json_encode($allusers);
+				}
+			
+				//close database connection
+				$conn = null;
+			}catch(PDOException $e){
+		
+				//print error details to screen
+				echo $result . "<br>" . $e->getMessage();
+
+				//close database connection
+				$conn = null;
+			}
+			echo $_SESSION['printchk'];
+			unset($_SESSION['printchk']);
+			unset($_SESSION['tmpsubmit']);
+			unset($_SESSION['tmphiddenid']);
+			unset($_SESSION['tmphiddencode']);
 	}
 ?>
 
@@ -164,6 +235,17 @@
 			}
 		</script>
 		<script>
+			function changeAccess(){
+
+			}
+
+		</scrip>
+		<script>
+			function resendPin(){
+
+			}
+		</script>
+		<script>
 		function populateUsers(){
 			var userlevel=<?php echo $_SESSION['ulevel'];?>;
 			if(userlevel!=3){
@@ -211,7 +293,74 @@
 						rep.setAttribute('class', "divusername");
 						rep.textContent=tabledata[i].rep;
 						celldiv.appendChild(rep);
-	
+
+						var webaccess=document.createElement("div");
+						webaccess.setAttribute('class', "divwebaccess");
+							var webform=document.createElement("form");
+							webform.setAttribute('method', "post");
+							webform.setAttribute('action', "account.html");
+
+							var hiddenid=document.createElement("input");
+							hiddenid.setAttribute('type', "hidden");
+							hiddenid.setAttribute('name', "hiddenid");
+							hiddenid.setAttribute('value', tabledata[i].userid);
+							webform.appendChild(hiddenid);
+				
+							var hiddencode=document.createElement("input");
+							hiddencode.setAttribute('type', "hidden");
+							hiddencode.setAttribute('name', "hiddencode");
+							hiddencode.setAttribute('value', tabledata[i].code);
+							webform.appendChild(hiddencode);
+
+							var activate=document.createElement("input");
+							activate.setAttribute('class', "webaccessactivate");
+							activate.setAttribute('type', "submit");
+							activate.setAttribute('name', "submit");
+							activate.setAttribute('value', "Activate");
+					
+							var revoke=document.createElement("input");
+							revoke.setAttribute('class',"webaccessrevoke");
+							revoke.setAttribute('type', "submit");
+							revoke.setAttribute('name', "submit");
+							revoke.setAttribute('value', "Revoke");
+
+							if(tabledata[i].level=="4"){
+								activate.disabled=false;
+								revoke.disabled=true;
+							}else{
+								activate.disabled=true;
+								revoke.disabled=false;
+							}
+			
+							webform.appendChild(activate);
+							webform.appendChild(revoke);
+						webaccess.appendChild(webform);
+						celldiv.appendChild(webaccess);
+						
+						var pinreset=document.createElement("div");
+						pinreset.setAttribute('class', "divpinreset");
+							var resendform = document.createElement("form");
+							resendform.setAttribute('method', "post");
+							resendform.setAttribute('action', "account.html");
+
+							var hiddenid2=document.createElement("input");
+							hiddenid2.setAttribute('type', "hidden");
+							hiddenid2.setAttribute('name', "hiddenid");
+							hiddenid2.setAttribute('value', tabledata[i].userid);
+							resendform.appendChild(hiddenid);
+
+							var resend=document.createElement("input");
+							resend.setAttribute('class', "resendpin");
+							resend.setAttribute('type', "submit");
+							resend.setAttribute('name', "submit");
+							resend.setAttribute('value', "Resend PIN");
+							resendform.appendChild(resend);
+			
+						pinreset.appendChild(resendform);
+						celldiv.appendChild(pinreset);
+
+
+
 						var clear=document.createElement("div");
 						clear.setAttribute('class', "clear");
 						celldiv.appendChild(clear);
@@ -294,8 +443,8 @@
 				<div class="divemail">E-Mail</div>
 				<div class="divphone">Phone</div>
 				<div class="divusername">Assigned Rep.</div>
-				<div class="divwebaccess">Web Access.</div>
-				<div class="divpinreset">Password.</div>
+				<div class="divwebaccess">Web Access</div>
+				<div class="divpinreset">Password</div>
 				<div class="clear"></div>
 				<table id="userstable">
 				</table>

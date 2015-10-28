@@ -104,12 +104,12 @@
 
 						//if level 1 or 2 account, populate user array
 						if($userlevel ==1){
-							$getusers = $conn->prepare("select username, email, firstname, lastname, phone, rep from users order by lastname asc");
+							$getusers = $conn->prepare("select userid, username, email, firstname, lastname, phone, rep, code, level from users order by lastname asc");
 							$getusers->execute();
 							$allusers= $getusers->fetchAll(PDO::FETCH_ASSOC);
 							$_SESSION['userarray']=json_encode($allusers);
 						}else if($userlevel ==2){
-							$getusers = $conn->prepare("select username, email, firstname, lastname, phone, rep from users where rep=:rep order by lastname asc");
+							$getusers = $conn->prepare("select userid, username, email, firstname, lastname, phone, rep, code, level from users where rep=:rep order by lastname asc");
 							$getusers->execute(array(':rep' => "$newuser"));
 							$allusers= $getusers->fetchAll(PDO::FETCH_ASSOC);
 							$_SESSION['userarray']=json_encode($allusers);
