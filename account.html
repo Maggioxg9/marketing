@@ -103,10 +103,11 @@
 			$uid=$_SESSION['tmphiddenid'];
 			$hcode=$_SESSION['tmphiddencode'];
 			$newuser=$_SESSION['usr'];
+			$userlevel=$_SESSION['ulevel'];
 			$level=6;
-
+			
 			if($_SESSION['tmpsubmit']=="Activate"){
-				if(empty($hcode])){
+				if($hcode=="null"){
 					$level=3;
 				}else{
 					$level=2;
