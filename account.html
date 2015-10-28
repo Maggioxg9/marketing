@@ -14,11 +14,8 @@
 		if(isset($_POST['submit'])){
 			//post came from webaccess+pin
 			$_SESSION['tmpsubmit']= $_POST['submit'];
-			$_SESSION['tmphiddenid']=$_POST['hiddenid'];
-			$_SESSION['printchk']=$_POST;
-			if(!empty($_POST['hiddencode'])){
-				$_SESSION['tmphiddencode']=$_POST['hiddencode'];
-			}
+			$_SESSION['tmphiddenid']=$_POST['hiddenuid'];
+			$_SESSION['tmphiddencode']=$_POST['hiddencode'];
 		}else{
 			$_SESSION['tmppostbool']=htmlspecialchars($_POST['changefieldboolean']);
 			$_SESSION['tmppostemail']=htmlspecialchars($_POST['email']);
@@ -117,16 +114,12 @@
 				$level=4;
 			}
 			try{
-
-				$_SESSION['printchk'].="here";
 				//create a database connection
 				$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 				$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				$_SESSION['printchk'].=$level;
 				//create and execute sql query to update user info
 				$stmt= $conn->prepare("update users set level=:level where userid=:userid");
 				$stmt->execute(array(':level'=>"$level",':userid' => "$uid"));
-				$_SESSION['printchk'].="there";
 
 				//create and execute sql query to update userarray if level 1 or 2 account
 				if($userlevel ==1){
@@ -151,8 +144,6 @@
 				//close database connection
 				$conn = null;
 			}
-			echo $_SESSION['printchk'];
-			unset($_SESSION['printchk']);
 			unset($_SESSION['tmpsubmit']);
 			unset($_SESSION['tmphiddenid']);
 			unset($_SESSION['tmphiddencode']);
@@ -302,18 +293,12 @@
 							var webform=document.createElement("form");
 							webform.setAttribute('method', "post");
 							webform.setAttribute('action', "account.html");
-
-							var hiddenid=document.createElement("input");
-							hiddenid.setAttribute('type', "hidden");
-							hiddenid.setAttribute('name', "hiddenid");
-							hiddenid.setAttribute('value', tabledata[i].userid);
-							webform.appendChild(hiddenid);
 				
-							var hiddencode=document.createElement("input");
-							hiddencode.setAttribute('type', "hidden");
-							hiddencode.setAttribute('name', "hiddencode");
-							hiddencode.setAttribute('value', tabledata[i].code);
-							webform.appendChild(hiddencode);
+							var hiddenuid=document.createElement("input");
+							hiddenuid.setAttribute('type', "hidden");
+							hiddenuid.setAttribute('name', "hiddenuid");
+							hiddenuid.setAttribute('value', tabledata[i].userid);
+							webform.appendChild(hiddenuid);
 
 							var activate=document.createElement("input");
 							activate.setAttribute('class', "webaccessactivate");
@@ -348,9 +333,9 @@
 
 							var hiddenid2=document.createElement("input");
 							hiddenid2.setAttribute('type', "hidden");
-							hiddenid2.setAttribute('name', "hiddenid");
+							hiddenid2.setAttribute('name', "hiddenuid");
 							hiddenid2.setAttribute('value', tabledata[i].userid);
-							resendform.appendChild(hiddenid);
+							resendform.appendChild(hiddenid2);
 
 							var resend=document.createElement("input");
 							resend.setAttribute('class', "resendpin");
