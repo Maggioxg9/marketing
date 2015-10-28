@@ -53,7 +53,7 @@
 					$phone= htmlspecialchars($_POST["phone"]);
 					$repid = htmlspecialchars($_POST['refcode']);
 					$level="4";
-					$aelevel="2";
+					$aelevel="4";
 					$rep="";
 				
 					try{
