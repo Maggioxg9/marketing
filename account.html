@@ -154,9 +154,14 @@
 					$stmt= $conn->prepare("select email, recovery from users where userid=:userid");
 					$stmt->execute(array(':userid' => "$uid"));
 					$result = $stmt->fetch(PDO::FETCH_ASSOC);
-					echo $result["email"];
-					echo $result["recovery"];
-					conn=null;
+					
+					//send confirmation emai
+					$msg= "***PLEASE DO NOT REPLY TO THIS EMAIL IT WILL NEVER BE RECEIVED***\r\n\r\n";
+					$msg.="This is an automated response to a recovery PIN request. If you did not put in for this request, please speak to your Accel representative.\r\n\r\n";
+					$msg.="Your password recovery PIN: ".$result["recovery"]."\r\n\r\n";
+					$msg.="Thank you for choosing to support and advertise Accel Entertainment,\r\n\r\nThe Accel Entertainment Marketing Team\r\n";
+					mail($result["email"], "AE Marketing PIN", wordwrap($msg, 70), "From: <aemarketingtechsupport@gmail.com>"); 
+					$conn=null;
 				}catch(PDOException $e){
 			
 					//print error details to screen
