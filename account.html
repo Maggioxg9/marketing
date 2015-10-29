@@ -104,45 +104,67 @@
 			$userlevel=$_SESSION['ulevel'];
 			$level=6;
 			
-			if($_SESSION['tmpsubmit']=="Activate"){
-				if($hcode=="null"){
-					$level=3;
+			if($_SESSION['tmpsubmit']!="Resend PIN"){
+				if($_SESSION['tmpsubmit']=="Activate"){
+					if($hcode=="null"){
+						$level=3;
+					}else{
+						$level=2;
+					}
 				}else{
-					$level=2;
+					$level=4;
+				}
+				try{
+					//create a database connection
+					$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+					$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+					//create and execute sql query to update user info
+					$stmt= $conn->prepare("update users set level=:level where userid=:userid");
+					$stmt->execute(array(':level'=>"$level",':userid' => "$uid"));
+	
+					//create and execute sql query to update userarray if level 1 or 2 account
+					if($userlevel ==1){
+						$getusers = $conn->prepare("select userid, username, email, firstname, lastname, phone, rep, code, level from users order by lastname asc");
+						$getusers->execute();
+						$allusers= $getusers->fetchAll(PDO::FETCH_ASSOC);
+						$_SESSION['userarray']=json_encode($allusers);
+					}else if($userlevel ==2){
+						$getusers = $conn->prepare("select userid, username, email, firstname, lastname, phone, rep, code, level from users where rep=:rep order by lastname asc");
+						$getusers->execute(array(':rep' => "$newuser"));
+						$allusers= $getusers->fetchAll(PDO::FETCH_ASSOC);
+						$_SESSION['userarray']=json_encode($allusers);
+					}
+				
+					//close database connection
+					$conn = null;
+				}catch(PDOException $e){
+			
+					//print error details to screen
+					echo $result . "<br>" . $e->getMessage();
+	
+					//close database connection
+					$conn = null;
 				}
 			}else{
-				$level=4;
-			}
-			try{
-				//create a database connection
-				$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-				$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				//create and execute sql query to update user info
-				$stmt= $conn->prepare("update users set level=:level where userid=:userid");
-				$stmt->execute(array(':level'=>"$level",':userid' => "$uid"));
-
-				//create and execute sql query to update userarray if level 1 or 2 account
-				if($userlevel ==1){
-					$getusers = $conn->prepare("select userid, username, email, firstname, lastname, phone, rep, code, level from users order by lastname asc");
-					$getusers->execute();
-					$allusers= $getusers->fetchAll(PDO::FETCH_ASSOC);
-					$_SESSION['userarray']=json_encode($allusers);
-				}else if($userlevel ==2){
-					$getusers = $conn->prepare("select userid, username, email, firstname, lastname, phone, rep, code, level from users where rep=:rep order by lastname asc");
-					$getusers->execute(array(':rep' => "$newuser"));
-					$allusers= $getusers->fetchAll(PDO::FETCH_ASSOC);
-					$_SESSION['userarray']=json_encode($allusers);
-				}
+				//resend PIN, get recovery email and pin
+				try{
+					$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+					$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+					//create and execute sql query to update user info
+					$stmt= $conn->prepare("select email, recovery from users where userid=:userid");
+					$stmt->execute(array(':userid' => "$uid"));
+					$result = $stmt->fetch(PDO::FETCH_ASSOC);
+					echo $result["email"];
+					echo $result["recovery"];
+					conn=null;
+				}catch(PDOException $e){
 			
-				//close database connection
-				$conn = null;
-			}catch(PDOException $e){
-		
-				//print error details to screen
-				echo $result . "<br>" . $e->getMessage();
-
-				//close database connection
-				$conn = null;
+					//print error details to screen
+					echo $result . "<br>" . $e->getMessage();
+	
+					//close database connection
+					$conn = null;
+				}
 			}
 			unset($_SESSION['tmpsubmit']);
 			unset($_SESSION['tmphiddenid']);
