@@ -1,12 +1,12 @@
 <?php
-	session_start()
+	session_start();
 
 	if(count($_POST) > 0){
 
-		$secret= "6Ld-CA4TAAAAAER5Lq6-85en9z0XjFVI3sX1ure5";
-		$response = null;
+		//$secret= "6Ld-CA4TAAAAAER5Lq6-85en9z0XjFVI3sX1ure5";
+		//$response = null;
 	
-		$recaptcha = new ReCaptcha($secret);
+		//$recaptcha = new ReCaptcha($secret);
 	
 		
 		// isset($_POST["g-recaptcha-response"])
@@ -49,8 +49,9 @@
 						if($stmt->rowcount() > 0){
 							if($pin==$result["recovery"]){
 								//update password
+								$tmpuserid=$result["userid"];
 								$chk= $conn->prepare("update users set password=:pass where userid=:userid");
-								$chk->execute(array(':userid' => "$result["userid"]",':pass'=> "$newpass"));
+								$chk->execute(array(':userid' => "$tmpuserid",':pass'=> password_hash($newpass,PASSWORD_DEFAULT)));
 			
 								$conn=null;
 								header("Location: ../recoveryvalidated.html");	
