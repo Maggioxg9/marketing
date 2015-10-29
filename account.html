@@ -13,9 +13,9 @@
 		//determine if the POST is edit details, or webaccess+pin
 		if(isset($_POST['submit'])){
 			//post came from webaccess+pin
-			$_SESSION['tmpsubmit']= $_POST['submit'];
-			$_SESSION['tmphiddenid']=$_POST['hiddenuid'];
-			$_SESSION['tmphiddencode']=$_POST['hiddencode'];
+			$_SESSION['tmpsubmit']= htmlspecialchars($_POST['submit']);
+			$_SESSION['tmphiddenid']=htmlspecialchars($_POST['hiddenuid']);
+			$_SESSION['tmphiddencode']=htmlspecialchars($_POST['hiddencode']);
 		}else{
 			$_SESSION['tmppostbool']=htmlspecialchars($_POST['changefieldboolean']);
 			$_SESSION['tmppostemail']=htmlspecialchars($_POST['email']);

@@ -28,13 +28,13 @@ create table orderitems (orderitemid int not null auto_increment, orderid int no
 
 insert into users (username, password, level, email, firstname, lastname, phone, code) values ("zacharym", "$2y$10$kc5RNma6lNfWh1wZ6nYQBevwP.GEGKojbMT09QgqWGiipQIyvEWdy", "1", "ZacharyM@accelentertainment.com", "Zach", "Maggio", "260-667-8932", 919455319);
 
-insert into users (username,password,  level, email, firstname, lastname, phone) values ("brads", "$2y$10$38O2.g4HwntCeUsmVwQ.teRI8tfcwmTLc13JftqUbDpHpQCcMsPYG", "2", "BradS@accelentertainment.com", "Brad", "Shapiro", "913-596-8950");
+insert into users (username,password,  level, email, firstname, lastname, phone, code) values ("brads", "$2y$10$38O2.g4HwntCeUsmVwQ.teRI8tfcwmTLc13JftqUbDpHpQCcMsPYG", "2", "BradS@accelentertainment.com", "Brad", "Shapiro", "913-596-8950", 888888888);
 
-insert into users (username, password, level, email, firstname, lastname, phone, rep) values ("johnd", "$2y$10$kc5RNma6lNfWh1wZ6nYQBevwP.GEGKojbMT09QgqWGiipQIyvEWdy", "3", "JohnD@accelentertainment.com", "John", "Doe", "123-456-7899", "brads");
+insert into users (username, password, level, email, firstname, lastname, phone, code) values ("johnd", "$2y$10$kc5RNma6lNfWh1wZ6nYQBevwP.GEGKojbMT09QgqWGiipQIyvEWdy", "4", "JohnD@accelentertainment.com", "John", "Doe", "123-456-7899", 999999999);
 
-insert into users (username, password, level, email, firstname, lastname, phone, rep) values ("janed", "$2y$10$kc5RNma6lNfWh1wZ6nYQBevwP.GEGKojbMT09QgqWGiipQIyvEWdy", "3", "JaneD@accelentertainment.com", "Jane", "Doe", "123-456-7899", "brads");
+insert into users (username, password, level, email, firstname, lastname, phone, rep) values ("janed", "$2y$10$kc5RNma6lNfWh1wZ6nYQBevwP.GEGKojbMT09QgqWGiipQIyvEWdy", "4", "JaneD@accelentertainment.com", "Jane", "Doe", "123-456-7899", "brads");
 
-insert into users (username, password, level, email, firstname, lastname, phone, rep) values ("joeyd", "$2y$10$kc5RNma6lNfWh1wZ6nYQBevwP.GEGKojbMT09QgqWGiipQIyvEWdy", "3", "JoeyD@accelentertainment.com", "Joey", "Doe", "123-456-7899", "brads");
+insert into users (username, password, level, email, firstname, lastname, phone, rep) values ("joeyd", "$2y$10$kc5RNma6lNfWh1wZ6nYQBevwP.GEGKojbMT09QgqWGiipQIyvEWdy", "4", "JoeyD@accelentertainment.com", "Joey", "Doe", "123-456-7899", "brads");
 
 insert into carts (userid) values ("1");
 
