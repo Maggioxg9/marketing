@@ -332,12 +332,24 @@
 							activate.setAttribute('type', "submit");
 							activate.setAttribute('name', "submit");
 							activate.setAttribute('value', "Activate");
+							if(tabledata[i].rep=="null"){
+								var activatestring="return confirm(\'The user: ".concat(tabledata[i].username).concat(" has opted for Accel Employee privilages. Click \"Ok\" to activate the account.\');");
+							
+								activate.setAttribute('onclick', activatestring);
+							}else{
+								var activatestring="return confirm(\'The user: ".concat(tabledata[i].username).concat(" has opted for Client Location privilages. Click \"Ok\" to activate the account.\');");
+								activate.setAttribute('onclick', activatestring);
+							}
 					
 							var revoke=document.createElement("input");
 							revoke.setAttribute('class',"webaccessrevoke");
 							revoke.setAttribute('type', "submit");
 							revoke.setAttribute('name', "submit");
 							revoke.setAttribute('value', "Revoke");
+							var confirmstring="return confirm(\'Revoking ".concat(tabledata[i].username).concat(" will suspend them from logging on until they are re-activated. Click \"Ok\" to suspend the account.\');");
+							revoke.setAttribute('onclick', confirmstring);
+				
+							
 
 							if(tabledata[i].level=="4"){
 								activate.disabled=false;
@@ -369,6 +381,8 @@
 							resend.setAttribute('type', "submit");
 							resend.setAttribute('name', "submit");
 							resend.setAttribute('value', "Resend PIN");
+							var resendstring="return confirm(\'User: ".concat(tabledata[i].username).concat(" will receive an e-mail at ").concat(tabledata[i].email).concat(" with their recovery PIN. Click \"Ok\" to resend their PIN.\');");
+							resend.setAttribute('onclick', resendstring);
 							resendform.appendChild(resend);
 			
 						pinreset.appendChild(resendform);
