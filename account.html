@@ -181,7 +181,9 @@
 <html>
 	<head>
 	<link rel="stylesheet" type="text/css" href="style.css">
-			
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>		
 
 	<script>
 		function editAccountInfo(){
@@ -193,6 +195,39 @@
 			}
 		}
 	</script>
+	<script>
+		function unregisterForm(){
+			$('form').on('submit', function (e){e.preventDefault();var form = this; confirmBox('Confirm', 'Are you sure?', function (){ form.submit();} ); });
+		}
+	</script>
+	<script>
+		function confirmBox(title, message, success){
+			var opt = {
+					resizable: false,
+					autoOpen: false,
+					title:	title,
+					zIndex: 10000,
+					width: 'auto',
+					modal:	true,
+					buttons: {
+						"Ok": function() {
+							success();
+							$(this).dialog("close");
+							
+						},
+						Cancel: function () {
+							$(this).dialog("close");
+						}
+					},
+					close: function(){
+						$(this).remove();
+					}
+				};
+			var divbox = $('<div></div>').appendTo('body').html('<div><h6>'+ message + '</h6></div>').dialog(opt);
+			return divbox.dialog("open");
+		}
+	</script>
+	
 	<script>
 		function initializeAccountDetails(){
 			var check = "<?php
@@ -318,6 +353,7 @@
 						var webaccess=document.createElement("div");
 						webaccess.setAttribute('class', "divwebaccess");
 							var webform=document.createElement("form");
+							webform.setAttribute('class', "actionforms");
 							webform.setAttribute('method', "post");
 							webform.setAttribute('action', "account.html");
 				
@@ -347,7 +383,8 @@
 							revoke.setAttribute('name', "submit");
 							revoke.setAttribute('value', "Revoke");
 							var confirmstring="return confirm(\'Revoking ".concat(tabledata[i].username).concat(" will suspend them from logging on until they are re-activated. Click \"Ok\" to suspend the account.\');");
-							revoke.setAttribute('onclick', confirmstring);
+							revoke.setAttribute('onclick', "confirmBox();");
+							
 				
 							
 
@@ -367,6 +404,7 @@
 						var pinreset=document.createElement("div");
 						pinreset.setAttribute('class', "divpinreset");
 							var resendform = document.createElement("form");
+							resendform.setAttribute('class', "actionforms");
 							resendform.setAttribute('method', "post");
 							resendform.setAttribute('action', "account.html");
 
