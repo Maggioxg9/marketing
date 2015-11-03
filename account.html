@@ -9,11 +9,10 @@
 	}
 	//this will handle confirm resubmittion errors by implementing PRG using single file
 	if(count($_POST) >0){
-
 		//determine if the POST is edit details, or webaccess+pin
-		if(isset($_POST['submit'])){
+		if(isset($_POST['websubmit'])){
 			//post came from webaccess+pin
-			$_SESSION['tmpsubmit']= htmlspecialchars($_POST['submit']);
+			$_SESSION['tmpsubmit']= htmlspecialchars($_POST['websubmit']);
 			$_SESSION['tmphiddenid']=htmlspecialchars($_POST['hiddenuid']);
 			$_SESSION['tmphiddencode']=htmlspecialchars($_POST['hiddencode']);
 		}else{
@@ -197,11 +196,42 @@
 	</script>
 	<script>
 		function unregisterForm(){
-			$('form').on('submit', function (e){e.preventDefault();var form = this; confirmBox('Confirm', 'Are you sure?', function (){ form.submit();} ); });
+		var tabledata=<?php echo $_SESSION['userarray'];?>;
+				$(".webaccessactivate").click(function(e){ 
+					e.preventDefault();
+					var index=e.target.id.replace("activate", '');
+					if(!tabledata[index].rep){
+						var activatestring="The user: ".concat(tabledata[index].username).concat(" has opted for Accel Employee privilages. Click \"Ok\" to activate the account.");
+						confirmBox('Account Activation', activatestring, $(this), function ($obj){ 
+						$obj.parents("form").submit();
+						});
+					}else{
+						var activatestring="The user: ".concat(tabledata[index].username).concat(" has opted for Client Location privilages. Click \"Ok\" to activate the account.");
+						confirmBox('Account Activation', activatestring, $(this), function ($obj){ 
+						$obj.parents("form").submit();
+						});
+					}
+				});
+				$('.webaccessrevoke').click(function(e){ 
+					e.preventDefault();
+					var index=e.target.id.replace("revoke", '');
+					var confirmstring="Revoking ".concat(tabledata[index].username).concat(" will suspend them from logging on until they are re-activated. Click \"Ok\" to suspend the account.");
+					confirmBox('Suspend Account', confirmstring, $(this), function ($obj){ 
+						$obj.parents("form").submit();
+					});
+				});
+				$('.resendpin').click(function(e){ 
+					e.preventDefault();
+					var index=e.target.id.replace("resendpin", '');
+					var resendstring="User: ".concat(tabledata[index].username).concat(" will receive an e-mail at ").concat(tabledata[index].email).concat(" with their recovery PIN. Click \"Ok\" to resend their PIN.");
+					confirmBox('Resend PIN', resendstring, $(this), function ($obj){ 
+						$obj.parents("form").submit();
+					});
+				});
 		}
 	</script>
 	<script>
-		function confirmBox(title, message, success){
+		function confirmBox(title, message, domref, success){
 			var opt = {
 					resizable: false,
 					autoOpen: false,
@@ -211,7 +241,7 @@
 					modal:	true,
 					buttons: {
 						"Ok": function() {
-							success();
+							success(domref);
 							$(this).dialog("close");
 							
 						},
@@ -362,40 +392,35 @@
 							hiddenuid.setAttribute('name', "hiddenuid");
 							hiddenuid.setAttribute('value', tabledata[i].userid);
 							webform.appendChild(hiddenuid);
+							
+							var hiddensub=document.createElement("input");
+							hiddensub.setAttribute('type', "hidden");
+							hiddensub.setAttribute('name', "websubmit");
 
 							var activate=document.createElement("input");
 							activate.setAttribute('class', "webaccessactivate");
+							activate.setAttribute('id', "activate"+i);
 							activate.setAttribute('type', "submit");
-							activate.setAttribute('name', "submit");
+							activate.setAttribute('name', "websubmit");
 							activate.setAttribute('value', "Activate");
-							if(tabledata[i].rep=="null"){
-								var activatestring="return confirm(\'The user: ".concat(tabledata[i].username).concat(" has opted for Accel Employee privilages. Click \"Ok\" to activate the account.\');");
-							
-								activate.setAttribute('onclick', activatestring);
-							}else{
-								var activatestring="return confirm(\'The user: ".concat(tabledata[i].username).concat(" has opted for Client Location privilages. Click \"Ok\" to activate the account.\');");
-								activate.setAttribute('onclick', activatestring);
-							}
 					
 							var revoke=document.createElement("input");
 							revoke.setAttribute('class',"webaccessrevoke");
+							revoke.setAttribute('id', "revoke"+i);
 							revoke.setAttribute('type', "submit");
-							revoke.setAttribute('name', "submit");
+							revoke.setAttribute('name', "websubmit");
 							revoke.setAttribute('value', "Revoke");
-							var confirmstring="return confirm(\'Revoking ".concat(tabledata[i].username).concat(" will suspend them from logging on until they are re-activated. Click \"Ok\" to suspend the account.\');");
-							revoke.setAttribute('onclick', "confirmBox();");
-							
-				
-							
 
 							if(tabledata[i].level=="4"){
+								hiddensub.setAttribute('value', "Activate");
 								activate.disabled=false;
 								revoke.disabled=true;
 							}else{
+								hiddensub.setAttribute('value', "Revoke");
 								activate.disabled=true;
 								revoke.disabled=false;
 							}
-			
+							webform.appendChild(hiddensub);
 							webform.appendChild(activate);
 							webform.appendChild(revoke);
 						webaccess.appendChild(webform);
@@ -413,14 +438,19 @@
 							hiddenid2.setAttribute('name', "hiddenuid");
 							hiddenid2.setAttribute('value', tabledata[i].userid);
 							resendform.appendChild(hiddenid2);
+							
+							var hiddensub2=document.createElement("input");
+							hiddensub2.setAttribute('type', "hidden");
+							hiddensub2.setAttribute('name', "websubmit");
+							hiddensub2.setAttribute('value', "Resend PIN")
+							resendform.appendChild(hiddensub2);
 
 							var resend=document.createElement("input");
 							resend.setAttribute('class', "resendpin");
+							resend.setAttribute('id', "resendpin"+i);
 							resend.setAttribute('type', "submit");
-							resend.setAttribute('name', "submit");
+							resend.setAttribute('name', "websubmit");
 							resend.setAttribute('value', "Resend PIN");
-							var resendstring="return confirm(\'User: ".concat(tabledata[i].username).concat(" will receive an e-mail at ").concat(tabledata[i].email).concat(" with their recovery PIN. Click \"Ok\" to resend their PIN.\');");
-							resend.setAttribute('onclick', resendstring);
 							resendform.appendChild(resend);
 			
 						pinreset.appendChild(resendform);
@@ -494,9 +524,11 @@
 				<center><input id="editbutton" type="submit" name="editbutton" value="Edit Details"></center>
 				</div>
 			</form>
+			
 			<script>
 				initializeAccountDetails();
 			</script>
+			
 							
 
 		</div>
@@ -517,6 +549,9 @@
 				</table>
 				<script>
 					populateUsers();
+				</script>
+				<script>
+					unregisterForm();
 				</script>
 			</div>
 		
